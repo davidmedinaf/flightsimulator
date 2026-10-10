@@ -54,7 +54,8 @@ export default function App() {
   const [mode, setMode] = useState<ViewMode>(link.full ? 'full' : 'focus');
   const [contents, setContents] = useState(link.contents);
   const [confirmRestart, setConfirmRestart] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  // The practice line the student picked, and whether it was still open at that moment.
+  const [selected, setSelected] = useState<{ id: string; wasTodo: boolean } | null>(null);
   const [lastOp, setLastOp] = useState<string | null>(null);
 
   useEffect(() => saveRun(run), [run]);
@@ -176,21 +177,29 @@ export default function App() {
   const count = guided ? total : sections.length;
   const unit = guided ? 'Step' : 'Sub-panel';
 
-  // What to mark on the panel.
+  // In practice, one line is active at a time: the one the student picked, or
+  // else the next open one. A line picked while open hands over to the next
+  // open line as soon as it is done.
+  const items = [...section.actions, ...section.checks];
+  const isTodo = (id: string) => {
+    const item = items.find((i) => i.id === id);
+    return Boolean(item) && itemStatus(item!, sim, levels, practice.ticks) === 'todo';
+  };
+  const picked = selected && items.find((i) => i.id === selected.id);
+  const active = picked && (!selected.wasTodo || isTodo(picked.id)) ? picked : items.find((i) => isTodo(i.id));
+
+  // What to mark on the panel: only the controls of the current step or line.
   let highlights: Highlight[] = [];
   if (step) {
     const tone: Tone = step.type === 'action' ? 'action' : step.type === 'check' ? 'check' : 'neutral';
     highlights = stepControls(procedure, step).map((control) => ({ control, tone, pulse: true }));
-  } else {
-    for (const item of [...section.actions, ...section.checks]) {
-      const done = itemStatus(item, sim, levels, practice.ticks) !== 'todo';
-      for (const id of item.controls) {
-        if (panel.controls[id]) {
-          highlights.push({ control: panel.controls[id], tone: done ? 'done' : item.kind, pulse: selected === item.id });
-        }
-      }
-    }
+  } else if (active) {
+    const tone: Tone = isTodo(active.id) ? active.kind : 'done';
+    highlights = active.controls.filter((id) => panel.controls[id]).map((id) => ({ control: panel.controls[id], tone, pulse: true }));
   }
+  // In practice the view stays on the whole sub-panel while the highlight moves within it.
+  const frame = step ? undefined : section.controls.filter((id) => panel.controls[id]).map((id) => panel.controls[id]);
+  const textOnly = Boolean(step) && highlights.length === 0;
 
   const todo = sections.map(
     (s) => [...s.actions, ...s.checks].filter((i) => itemStatus(i, sim, levels, practice.ticks) === 'todo').length,
@@ -306,21 +315,22 @@ export default function App() {
             <PanelView
               panel={panel}
               highlights={highlights}
+              frame={frame}
               mode={mode}
               sim={sim}
               levels={levels}
               onOperate={onOperate}
-              dimmed={highlights.length === 0}
+              dimmed={textOnly}
             />
             <div className="panel-chrome">
               <span className="panel-name" aria-live="polite">
-                {highlights.length === 0
+                {textOnly
                   ? step?.textOnly === 'info'
                     ? 'Nothing to highlight for this step'
                     : 'Not on this panel'
                   : (lastOp ?? 'Tap a switch to move it')}
               </span>
-              {highlights.length > 0 && (
+              {!textOnly && (
                 <button className="btn btn-overlay" onClick={() => setMode(mode === 'focus' ? 'full' : 'focus')}>
                   {mode === 'focus' ? 'Show full panel' : 'Zoom in'}
                 </button>
@@ -340,8 +350,8 @@ export default function App() {
                 sim={sim}
                 levels={levels}
                 ticks={practice.ticks}
-                selected={selected}
-                onSelect={setSelected}
+                selected={active?.id ?? null}
+                onSelect={(id) => setSelected({ id, wasTodo: isTodo(id) })}
                 onTick={(id, ticked) =>
                   setPractice((p) => ({ ...p, ticks: ticked ? [...p.ticks, id] : p.ticks.filter((t) => t !== id) }))
                 }

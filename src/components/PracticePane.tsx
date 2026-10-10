@@ -25,7 +25,7 @@ interface Props {
   levels: Record<string, LightLevel>;
   ticks: string[];
   selected: string | null;
-  onSelect: (id: string | null) => void;
+  onSelect: (id: string) => void;
   onTick: (id: string, ticked: boolean) => void;
 }
 

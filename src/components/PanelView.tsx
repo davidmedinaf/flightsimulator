@@ -16,6 +16,8 @@ export interface Highlight {
 interface Props {
   panel: Panel;
   highlights: Highlight[];
+  /** Controls the zoomed view should show. Defaults to the highlighted ones. */
+  frame?: Control[];
   mode: ViewMode;
   sim: SimState;
   levels: Record<string, LightLevel>;
@@ -38,7 +40,7 @@ function clamp(v: number, lo: number, hi: number) {
  * layer. Both share one box, so highlights stay aligned at any size or zoom.
  * Zooming resizes that box rather than scaling it, which keeps the drawing sharp.
  */
-export function PanelView({ panel, highlights, mode, sim, levels, onOperate, dimmed }: Props) {
+export function PanelView({ panel, highlights, frame, mode, sim, levels, onOperate, dimmed }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
 
@@ -60,8 +62,8 @@ export function PanelView({ panel, highlights, mode, sim, levels, onOperate, dim
   let tx = (size.w - baseW) / 2;
   let ty = (size.h - baseH) / 2;
 
-  if (mode === 'focus' && highlights.length > 0 && baseW > 0) {
-    const rects = highlights.map((h) => h.control.rect);
+  const rects = (frame ?? highlights.map((h) => h.control)).map((c) => c.rect);
+  if (mode === 'focus' && rects.length > 0 && baseW > 0) {
     let x0 = Math.min(...rects.map((r) => r[0]));
     let y0 = Math.min(...rects.map((r) => r[1]));
     let x1 = Math.max(...rects.map((r) => r[0] + r[2]));

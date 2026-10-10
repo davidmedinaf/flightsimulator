@@ -13,7 +13,7 @@ One procedure: the forward overhead panel part of *Preflight Procedure – PF*, 
 It can be worked through in two ways:
 
 - **Step by step.** The 91 steps of the manual one at a time, in its order and wording. The steps of the current sub-panel are listed on the right, and any step can be opened directly, from that list or from **All steps**.
-- **Practice.** The same procedure as 12 sub-panels. Each shows the actions to perform and the checks to make, grouped; lights that must show the same state are one line.
+- **Practice.** The same procedure as 12 sub-panels. Each shows the actions to perform and the checks to make, grouped; lights that must show the same state are one line. Only the controls of one line are highlighted at a time: the line tapped on the right, or else the next open one.
 
 84 steps highlight controls on the panel. 7 are text-only: six refer to items that are not on the forward overhead panel (fuel quantity, brake pressure, MFD SYSTEM switch, system A and B pressure, hydraulic quantity, accumulator pressure indicator) and one is an information note.
 
