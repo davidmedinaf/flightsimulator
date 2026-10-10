@@ -15,3 +15,6 @@ dist/
 /claude_flight_training_app_requirements.txt
 /FCOM 737-Max pg160-164.txt
 *.ogg
+
+# AI-generated look-and-feel references, kept locally.
+/PANEL *.jpeg

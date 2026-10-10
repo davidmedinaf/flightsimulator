@@ -813,7 +813,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text(rr.x - 8, rr.cy - 22, 'OFF', { size: 14, tone: 'dark', anchor: 'end' });
     text(rr.cx, rr.y2 + 12, 'AUTO', { size: 14, tone: 'dark' });
     const iso = box('air.isolationValve');
-    gauges.push({ x: iso.cx, y: (rl.y2 + iso.y) / 2 + 6, r: 72, label: ['DUCT', 'PRESS', 'PSI'], needle: 200 });
+    gauges.push({ x: iso.cx, y: (rl.y2 + iso.y) / 2 - 22, r: 52, label: ['DUCT', 'PRESS', 'PSI'], needle: 200 });
     dText(1846, 772, 'OVHT', { size: 13, tone: 'dark' });
     dButton(1846, 806, 16);
     dText(1846, 842, 'TEST', { size: 13, tone: 'dark' });
