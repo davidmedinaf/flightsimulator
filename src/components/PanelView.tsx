@@ -1,13 +1,26 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import type { Control, Panel } from '../data/types';
+import type { Control, LightLevel, Panel } from '../data/types';
+import type { SimState } from '../sim';
+import { Schematic } from './Schematic';
 
 export type ViewMode = 'focus' | 'full';
+export type Tone = 'neutral' | 'action' | 'check' | 'done';
+
+export interface Highlight {
+  control: Control;
+  tone: Tone;
+  /** Draws attention to the highlight of the line the student selected. */
+  pulse?: boolean;
+}
 
 interface Props {
   panel: Panel;
-  highlights: Control[];
+  highlights: Highlight[];
   mode: ViewMode;
-  /** Greys the image out; used for steps that have nothing to highlight on this panel. */
+  sim: SimState;
+  levels: Record<string, LightLevel>;
+  onOperate?: (id: string) => void;
+  /** Greys the panel out; used for steps that have nothing to highlight on it. */
   dimmed?: boolean;
 }
 
@@ -21,11 +34,11 @@ function clamp(v: number, lo: number, hi: number) {
 }
 
 /**
- * Shows the panel image with the highlights drawn in a separate overlay layer.
- * Image and overlay share one transformed box, so highlights stay aligned at
- * any size or zoom, and the image is never stretched.
+ * Shows the schematic panel with the highlights drawn in a separate overlay
+ * layer. Both share one box, so highlights stay aligned at any size or zoom.
+ * Zooming resizes that box rather than scaling it, which keeps the drawing sharp.
  */
-export function PanelView({ panel, highlights, mode, dimmed }: Props) {
+export function PanelView({ panel, highlights, mode, sim, levels, onOperate, dimmed }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
 
@@ -48,10 +61,11 @@ export function PanelView({ panel, highlights, mode, dimmed }: Props) {
   let ty = (size.h - baseH) / 2;
 
   if (mode === 'focus' && highlights.length > 0 && baseW > 0) {
-    let x0 = Math.min(...highlights.map((c) => c.rect[0]));
-    let y0 = Math.min(...highlights.map((c) => c.rect[1]));
-    let x1 = Math.max(...highlights.map((c) => c.rect[0] + c.rect[2]));
-    let y1 = Math.max(...highlights.map((c) => c.rect[1] + c.rect[3]));
+    const rects = highlights.map((h) => h.control.rect);
+    let x0 = Math.min(...rects.map((r) => r[0]));
+    let y0 = Math.min(...rects.map((r) => r[1]));
+    let x1 = Math.max(...rects.map((r) => r[0] + r[2]));
+    let y1 = Math.max(...rects.map((r) => r[1] + r[3]));
     const cx = (x0 + x1) / 2;
     const cy = (y0 + y1) / 2;
     const w = Math.max(x1 - x0 + 2 * PADDING, MIN_VIEW);
@@ -68,27 +82,26 @@ export function PanelView({ panel, highlights, mode, dimmed }: Props) {
     ty = scaledH <= size.h ? (size.h - scaledH) / 2 : clamp(size.h / 2 - cy * scaledH, size.h - scaledH, 0);
   }
 
-  const layerStyle = {
-    width: baseW,
-    height: baseH,
-    transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-    '--k': 1 / scale,
-  } as CSSProperties;
+  const layerStyle: CSSProperties = {
+    width: baseW * scale,
+    height: baseH * scale,
+    transform: `translate(${tx}px, ${ty}px)`,
+  };
 
   return (
     <div className="panel-view" ref={ref}>
       {baseW > 0 && (
         <div className={`panel-layer${dimmed ? ' is-dimmed' : ''}`} style={layerStyle}>
-          <img src={panel.image} alt={panel.name} draggable={false} />
-          {highlights.map((c, i) => (
+          <Schematic schematic={panel.schematic} sim={sim} levels={levels} onOperate={onOperate} />
+          {highlights.map((h, i) => (
             <div
-              key={`${c.label}-${i}`}
-              className={`highlight highlight-${c.kind}`}
+              key={`${h.control.label}-${i}`}
+              className={`highlight highlight-${h.control.kind} tone-${h.tone}${h.pulse ? ' is-pulsing' : ''}`}
               style={{
-                left: `${c.rect[0] * 100}%`,
-                top: `${c.rect[1] * 100}%`,
-                width: `${c.rect[2] * 100}%`,
-                height: `${c.rect[3] * 100}%`,
+                left: `${h.control.rect[0] * 100}%`,
+                top: `${h.control.rect[1] * 100}%`,
+                width: `${h.control.rect[2] * 100}%`,
+                height: `${h.control.rect[3] * 100}%`,
               }}
             >
               <span />

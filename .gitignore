@@ -14,3 +14,4 @@ dist/
 /flight_simulator_conversation_transcript.txt
 /claude_flight_training_app_requirements.txt
 /FCOM 737-Max pg160-164.txt
+*.ogg

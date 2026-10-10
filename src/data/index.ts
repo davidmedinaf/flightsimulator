@@ -1,9 +1,10 @@
 import type { Control, Panel, Procedure, Step } from './types';
 import fwdOverheadControls from './panels/fwd-overhead.controls.json';
+import { buildFwdOverhead } from './panels/fwd-overhead.schematic';
 import preflightPfOverhead from './procedures/preflight-pf-overhead.json';
 
-// To add a panel: put its image in public/panels/, add a <id>.controls.json next
-// to the existing one, and register it here.
+// To add a panel: add a <id>.controls.json and a <id>.schematic.ts next to the
+// existing ones, and register the panel here.
 export const panels: Record<string, Panel> = {
   'fwd-overhead': {
     id: 'fwd-overhead',
@@ -12,6 +13,7 @@ export const panels: Record<string, Panel> = {
     width: 2170,
     height: 2100,
     controls: fwdOverheadControls.controls as unknown as Record<string, Control>,
+    schematic: buildFwdOverhead(fwdOverheadControls.controls),
   },
 };
 
@@ -30,4 +32,23 @@ export function stepControls(procedure: Procedure, step: Step): Control[] {
 
 export function isMapped(procedure: Procedure, step: Step): boolean {
   return stepControls(procedure, step).length > 0;
+}
+
+/** Id of the level-1 item a step belongs to. */
+export function groupOf(step: Step): string {
+  return step.group ?? step.id;
+}
+
+/**
+ * Name of a light, switch or guard for messages. Individual lights of a
+ * measured group ("fuel.lowPress1.aft") fall back to the group's label.
+ */
+export function elementLabel(panel: Panel, id: string): string {
+  const sw = panel.schematic.switches.find((s) => s.id === id);
+  if (sw?.label) return sw.label;
+  if (panel.controls[id]) return panel.controls[id].label;
+  const parent = id.slice(0, id.lastIndexOf('.'));
+  const light = panel.schematic.lights.find((l) => l.id === id);
+  if (panel.controls[parent]) return `${panel.controls[parent].label} (${light?.lines.join(' ') ?? id})`;
+  return light?.lines.join(' ') ?? id;
 }

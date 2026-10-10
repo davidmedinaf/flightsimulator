@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { isMapped, panels, stepControls } from '../data';
 import type { Procedure } from '../data/types';
+import { initialSim, lightLevels } from '../sim';
+import { Schematic } from './Schematic';
 
 interface Props {
   procedure: Procedure;
@@ -14,6 +16,9 @@ interface Props {
 export function Review({ procedure, onClose }: Props) {
   const panel = panels[procedure.defaultPanel];
   const [selected, setSelected] = useState<string | null>(null);
+  const [view, setView] = useState<'schematic' | 'photo'>('schematic');
+  const sim = useMemo(() => initialSim(panel.schematic), [panel]);
+  const levels = useMemo(() => lightLevels(panel.schematic, sim), [panel, sim]);
   const entries = Object.entries(panel.controls);
   const flagged = entries.filter(([, c]) => c.reviewNote);
   const used = new Set(procedure.steps.flatMap((s) => s.controls ?? []));
@@ -32,9 +37,9 @@ export function Review({ procedure, onClose }: Props) {
 
       <div className="review-body">
         <p className="review-intro">
-          All {entries.length} mapped positions are shown on the photo. Tap a box to see what it is meant to mark.
-          Positions were placed by measuring the photo and checked visually; they have not yet been confirmed by an
-          instructor.
+          All {entries.length} mapped positions are shown. Tap a box to see what it is meant to mark. Positions were
+          measured on the reference photo, and the schematic is drawn from the same measurements; they have not yet
+          been confirmed by an instructor. The schematic shows the panel in its initial state.
         </p>
 
         <p className="review-selected" aria-live="polite">
@@ -48,8 +53,18 @@ export function Review({ procedure, onClose }: Props) {
           )}
         </p>
 
+        <div className="home-actions">
+          <button className="btn btn-quiet" onClick={() => setView(view === 'photo' ? 'schematic' : 'photo')}>
+            {view === 'photo' ? 'Show the schematic' : 'Show the reference photo'}
+          </button>
+        </div>
+
         <div className="review-panel" style={{ aspectRatio: `${panel.width} / ${panel.height}` }}>
-          <img src={panel.image} alt={panel.name} draggable={false} />
+          {view === 'photo' ? (
+            <img src={panel.image} alt={panel.name} draggable={false} />
+          ) : (
+            <Schematic schematic={panel.schematic} sim={sim} levels={levels} />
+          )}
           {entries.map(([id, c]) => (
             <button
               key={id}

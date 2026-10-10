@@ -34,6 +34,13 @@ export function advance(procedure: Procedure, run: RunState, choiceNext?: string
   return { ...run, history: [...run.history, next] };
 }
 
+/** Jumps straight to a step. It is added to the path, so Previous returns to where the student was. */
+export function jumpTo(procedure: Procedure, run: RunState, id: string): RunState {
+  if (!procedure.steps.some((s) => s.id === id)) return run;
+  if (!run.finished && run.history[run.history.length - 1] === id) return run;
+  return { ...run, history: [...run.history, id], finished: false };
+}
+
 export function goBack(run: RunState): RunState {
   if (run.finished) return { ...run, finished: false };
   if (run.history.length <= 1) return run;
