@@ -1,0 +1,1267 @@
+{
+  "panelId": "fwd-overhead",
+  "coordinateSpace": "normalised to the panel image: x and w are fractions of its width, y and h of its height",
+  "controls": {
+    "region.flightControl": {
+      "label": "Flight control panel",
+      "kind": "region",
+      "rect": [
+        0.0161,
+        0.019,
+        0.2143,
+        0.3167
+      ]
+    },
+    "region.navigation": {
+      "label": "NAVIGATION panel",
+      "kind": "region",
+      "rect": [
+        0.023,
+        0.3405,
+        0.2189,
+        0.1357
+      ]
+    },
+    "region.displays": {
+      "label": "DISPLAYS panel",
+      "kind": "region",
+      "rect": [
+        0.023,
+        0.4786,
+        0.2189,
+        0.0881
+      ]
+    },
+    "region.fuel": {
+      "label": "Fuel system panel",
+      "kind": "region",
+      "rect": [
+        0.0276,
+        0.5705,
+        0.2235,
+        0.3295
+      ]
+    },
+    "region.airCond": {
+      "label": "Air conditioning and bleed air panels",
+      "kind": "region",
+      "rect": [
+        0.7788,
+        0.0786,
+        0.2005,
+        0.5524
+      ]
+    },
+    "fltCtl.A": {
+      "label": "FLT CONTROL A switch",
+      "kind": "switch",
+      "rect": [
+        0.0396,
+        0.041,
+        0.0313,
+        0.0848
+      ]
+    },
+    "fltCtl.B": {
+      "label": "FLT CONTROL B switch",
+      "kind": "switch",
+      "rect": [
+        0.0982,
+        0.041,
+        0.0341,
+        0.0848
+      ]
+    },
+    "fltCtl.lowPressA": {
+      "label": "Flight control LOW PRESSURE light (A)",
+      "kind": "light",
+      "rect": [
+        0.0488,
+        0.1305,
+        0.0378,
+        0.0219
+      ]
+    },
+    "fltCtl.lowPressB": {
+      "label": "Flight control LOW PRESSURE light (B)",
+      "kind": "light",
+      "rect": [
+        0.0876,
+        0.1305,
+        0.0387,
+        0.0219
+      ]
+    },
+    "spoiler.A": {
+      "label": "SPOILER A switch",
+      "kind": "switch",
+      "rect": [
+        0.0488,
+        0.18,
+        0.0341,
+        0.0829
+      ]
+    },
+    "spoiler.B": {
+      "label": "SPOILER B switch",
+      "kind": "switch",
+      "rect": [
+        0.0935,
+        0.18,
+        0.0341,
+        0.0829
+      ]
+    },
+    "yawDamper.light": {
+      "label": "YAW DAMPER light",
+      "kind": "light",
+      "rect": [
+        0.0724,
+        0.2729,
+        0.0401,
+        0.0224
+      ]
+    },
+    "yawDamper.switch": {
+      "label": "YAW DAMPER switch",
+      "kind": "switch",
+      "rect": [
+        0.0747,
+        0.2924,
+        0.035,
+        0.0362
+      ]
+    },
+    "stbyHyd.lowQuantity": {
+      "label": "Standby hydraulic LOW QUANTITY light",
+      "kind": "light",
+      "rect": [
+        0.1631,
+        0.0333,
+        0.0392,
+        0.0205
+      ]
+    },
+    "stbyHyd.lowPressure": {
+      "label": "Standby hydraulic LOW PRESSURE light",
+      "kind": "light",
+      "rect": [
+        0.1631,
+        0.0548,
+        0.0392,
+        0.0205
+      ]
+    },
+    "stbyHyd.stbyRudOn": {
+      "label": "STBY RUD ON light",
+      "kind": "light",
+      "rect": [
+        0.1631,
+        0.0762,
+        0.0392,
+        0.0195
+      ]
+    },
+    "altFlaps.master": {
+      "label": "ALTERNATE FLAPS master switch",
+      "kind": "switch",
+      "rect": [
+        0.1382,
+        0.1033,
+        0.0359,
+        0.0881
+      ]
+    },
+    "altFlaps.position": {
+      "label": "ALTERNATE FLAPS position switch",
+      "kind": "switch",
+      "rect": [
+        0.1866,
+        0.1324,
+        0.0313,
+        0.0324
+      ]
+    },
+    "light.feelDiffPress": {
+      "label": "FEEL DIFF PRESS light",
+      "kind": "light",
+      "rect": [
+        0.1608,
+        0.2171,
+        0.0392,
+        0.019
+      ]
+    },
+    "light.speedTrimFail": {
+      "label": "SPEED TRIM FAIL light",
+      "kind": "light",
+      "rect": [
+        0.1608,
+        0.2376,
+        0.0392,
+        0.0186
+      ]
+    },
+    "light.machTrimFail": {
+      "label": "MACH TRIM FAIL light",
+      "kind": "light",
+      "rect": [
+        0.1608,
+        0.2576,
+        0.0392,
+        0.0181
+      ]
+    },
+    "light.autoSlatFail": {
+      "label": "AUTO SLAT FAIL light",
+      "kind": "light",
+      "rect": [
+        0.1608,
+        0.2771,
+        0.0392,
+        0.0186
+      ]
+    },
+    "light.spoilers": {
+      "label": "SPOILERS light",
+      "kind": "light",
+      "rect": [
+        0.1608,
+        0.2971,
+        0.0392,
+        0.019
+      ]
+    },
+    "nav.vhfNav": {
+      "label": "VHF NAV transfer switch",
+      "kind": "switch",
+      "rect": [
+        0.0604,
+        0.3671,
+        0.0332,
+        0.0343
+      ]
+    },
+    "nav.irs": {
+      "label": "IRS transfer switch",
+      "kind": "switch",
+      "rect": [
+        0.1618,
+        0.3662,
+        0.0332,
+        0.0343
+      ]
+    },
+    "nav.fmc": {
+      "label": "FMC source select switch",
+      "kind": "switch",
+      "rect": [
+        0.1631,
+        0.441,
+        0.0332,
+        0.0343
+      ]
+    },
+    "displays.source": {
+      "label": "SOURCE selector",
+      "kind": "selector",
+      "rect": [
+        0.0581,
+        0.5052,
+        0.0498,
+        0.0514
+      ]
+    },
+    "displays.controlPanel": {
+      "label": "CONTROL PANEL select switch",
+      "kind": "switch",
+      "rect": [
+        0.1654,
+        0.5138,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.crossfeed": {
+      "label": "CROSSFEED selector",
+      "kind": "selector",
+      "rect": [
+        0.112,
+        0.6743,
+        0.0516,
+        0.0533
+      ]
+    },
+    "fuel.valveOpen": {
+      "label": "VALVE OPEN light",
+      "kind": "light",
+      "rect": [
+        0.1194,
+        0.6548,
+        0.0364,
+        0.02
+      ]
+    },
+    "fuel.engValveClosedL": {
+      "label": "ENG VALVE CLOSED light (left)",
+      "kind": "light",
+      "rect": [
+        0.0502,
+        0.5762,
+        0.0369,
+        0.019
+      ]
+    },
+    "fuel.engValveClosedR": {
+      "label": "ENG VALVE CLOSED light (right)",
+      "kind": "light",
+      "rect": [
+        0.182,
+        0.5762,
+        0.0359,
+        0.019
+      ]
+    },
+    "fuel.sparValveClosedL": {
+      "label": "SPAR VALVE CLOSED light (left)",
+      "kind": "light",
+      "rect": [
+        0.0502,
+        0.5962,
+        0.0369,
+        0.019
+      ]
+    },
+    "fuel.sparValveClosedR": {
+      "label": "SPAR VALVE CLOSED light (right)",
+      "kind": "light",
+      "rect": [
+        0.182,
+        0.5962,
+        0.0359,
+        0.019
+      ]
+    },
+    "fuel.filterBypassL": {
+      "label": "FILTER BYPASS light (left)",
+      "kind": "light",
+      "rect": [
+        0.0525,
+        0.6548,
+        0.0369,
+        0.019
+      ]
+    },
+    "fuel.filterBypassR": {
+      "label": "FILTER BYPASS light (right)",
+      "kind": "light",
+      "rect": [
+        0.1843,
+        0.6548,
+        0.0359,
+        0.019
+      ]
+    },
+    "fuel.pumpCtrL": {
+      "label": "FUEL PUMPS switch, CTR L",
+      "kind": "switch",
+      "rect": [
+        0.1028,
+        0.7481,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.pumpCtrR": {
+      "label": "FUEL PUMPS switch, CTR R",
+      "kind": "switch",
+      "rect": [
+        0.1424,
+        0.7481,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.pumpAft1": {
+      "label": "FUEL PUMPS switch, tank 1 AFT",
+      "kind": "switch",
+      "rect": [
+        0.0548,
+        0.8186,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.pumpFwd1": {
+      "label": "FUEL PUMPS switch, tank 1 FWD",
+      "kind": "switch",
+      "rect": [
+        0.0935,
+        0.8186,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.pumpFwd2": {
+      "label": "FUEL PUMPS switch, tank 2 FWD",
+      "kind": "switch",
+      "rect": [
+        0.1548,
+        0.8186,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.pumpAft2": {
+      "label": "FUEL PUMPS switch, tank 2 AFT",
+      "kind": "switch",
+      "rect": [
+        0.194,
+        0.8186,
+        0.0332,
+        0.0343
+      ]
+    },
+    "fuel.lowPressCtr": {
+      "label": "Fuel pump LOW PRESSURE lights, CTR",
+      "kind": "light",
+      "rect": [
+        0.1032,
+        0.7224,
+        0.0719,
+        0.02
+      ]
+    },
+    "fuel.lowPress1": {
+      "label": "Fuel pump LOW PRESSURE lights, tank 1",
+      "kind": "light",
+      "rect": [
+        0.0548,
+        0.7938,
+        0.0719,
+        0.0195
+      ]
+    },
+    "fuel.lowPress2": {
+      "label": "Fuel pump LOW PRESSURE lights, tank 2",
+      "kind": "light",
+      "rect": [
+        0.1548,
+        0.7938,
+        0.0719,
+        0.0195
+      ]
+    },
+    "elec.cabUtil": {
+      "label": "CAB/UTIL switch",
+      "kind": "switch",
+      "rect": [
+        0.3419,
+        0.3552,
+        0.0332,
+        0.0343
+      ]
+    },
+    "elec.ifePassSeat": {
+      "label": "IFE/PASS SEAT switch",
+      "kind": "switch",
+      "rect": [
+        0.3857,
+        0.3552,
+        0.0332,
+        0.0343
+      ]
+    },
+    "elec.standbyPower": {
+      "label": "STANDBY POWER switch",
+      "kind": "switch",
+      "rect": [
+        0.3171,
+        0.461,
+        0.0571,
+        0.0371
+      ]
+    },
+    "elec.disconnect1": {
+      "label": "Generator drive DISCONNECT switch 1",
+      "kind": "switch",
+      "rect": [
+        0.2696,
+        0.4786,
+        0.0309,
+        0.0881
+      ]
+    },
+    "elec.disconnect2": {
+      "label": "Generator drive DISCONNECT switch 2",
+      "kind": "switch",
+      "rect": [
+        0.3908,
+        0.4786,
+        0.0309,
+        0.0881
+      ]
+    },
+    "elec.busTransfer": {
+      "label": "BUS TRANSFER switch",
+      "kind": "switch",
+      "rect": [
+        0.3111,
+        0.6667,
+        0.0853,
+        0.0362
+      ]
+    },
+    "lights.circuitBreaker": {
+      "label": "CIRCUIT BREAKER light control",
+      "kind": "selector",
+      "rect": [
+        0.4724,
+        0.189,
+        0.0535,
+        0.0552
+      ]
+    },
+    "lights.panel": {
+      "label": "PANEL light control",
+      "kind": "selector",
+      "rect": [
+        0.4747,
+        0.2757,
+        0.0535,
+        0.0552
+      ]
+    },
+    "equipCooling.supply": {
+      "label": "EQUIP COOLING SUPPLY switch",
+      "kind": "switch",
+      "rect": [
+        0.459,
+        0.421,
+        0.0332,
+        0.0343
+      ]
+    },
+    "equipCooling.exhaust": {
+      "label": "EQUIP COOLING EXHAUST switch",
+      "kind": "switch",
+      "rect": [
+        0.5065,
+        0.421,
+        0.0332,
+        0.0343
+      ]
+    },
+    "equipCooling.offLights": {
+      "label": "EQUIP COOLING OFF lights",
+      "kind": "light",
+      "rect": [
+        0.4627,
+        0.3867,
+        0.0737,
+        0.021
+      ]
+    },
+    "equipCooling.smoke": {
+      "label": "EQUIP SMOKE light",
+      "kind": "light",
+      "rect": [
+        0.4802,
+        0.4733,
+        0.0392,
+        0.0205
+      ]
+    },
+    "signs.fastenBelts": {
+      "label": "FASTEN BELTS switch",
+      "kind": "switch",
+      "rect": [
+        0.5055,
+        0.6257,
+        0.035,
+        0.0362
+      ]
+    },
+    "wiper.L": {
+      "label": "L WIPER selector",
+      "kind": "selector",
+      "rect": [
+        0.3696,
+        0.8367,
+        0.0535,
+        0.0552
+      ]
+    },
+    "wiper.R": {
+      "label": "R WIPER selector",
+      "kind": "selector",
+      "rect": [
+        0.4733,
+        0.8367,
+        0.0535,
+        0.0552
+      ]
+    },
+    "windowHeat.sideL": {
+      "label": "WINDOW HEAT L SIDE switch",
+      "kind": "switch",
+      "rect": [
+        0.5687,
+        0.0843,
+        0.0332,
+        0.0343
+      ]
+    },
+    "windowHeat.fwdL": {
+      "label": "WINDOW HEAT L FWD switch",
+      "kind": "switch",
+      "rect": [
+        0.6032,
+        0.0843,
+        0.0332,
+        0.0343
+      ]
+    },
+    "windowHeat.fwdR": {
+      "label": "WINDOW HEAT R FWD switch",
+      "kind": "switch",
+      "rect": [
+        0.6853,
+        0.0843,
+        0.0332,
+        0.0343
+      ]
+    },
+    "windowHeat.sideR": {
+      "label": "WINDOW HEAT R SIDE switch",
+      "kind": "switch",
+      "rect": [
+        0.7198,
+        0.0833,
+        0.0332,
+        0.0343
+      ]
+    },
+    "windowHeat.overheatL": {
+      "label": "Window heat OVERHEAT lights (L)",
+      "kind": "light",
+      "rect": [
+        0.5806,
+        0.0248,
+        0.076,
+        0.0205
+      ]
+    },
+    "windowHeat.overheatR": {
+      "label": "Window heat OVERHEAT lights (R)",
+      "kind": "light",
+      "rect": [
+        0.6664,
+        0.0248,
+        0.0747,
+        0.0205
+      ]
+    },
+    "windowHeat.onL": {
+      "label": "Window heat ON lights (L)",
+      "kind": "light",
+      "rect": [
+        0.5806,
+        0.0462,
+        0.076,
+        0.0195
+      ]
+    },
+    "windowHeat.onR": {
+      "label": "Window heat ON lights (R)",
+      "kind": "light",
+      "rect": [
+        0.6664,
+        0.0462,
+        0.0747,
+        0.0195
+      ]
+    },
+    "probeHeat.A": {
+      "label": "PROBE HEAT A switch",
+      "kind": "switch",
+      "rect": [
+        0.624,
+        0.14,
+        0.0332,
+        0.0343
+      ]
+    },
+    "probeHeat.B": {
+      "label": "PROBE HEAT B switch",
+      "kind": "switch",
+      "rect": [
+        0.6622,
+        0.14,
+        0.0332,
+        0.0343
+      ]
+    },
+    "probeHeat.lightsL": {
+      "label": "Probe heat lights (left column)",
+      "kind": "light",
+      "rect": [
+        0.5737,
+        0.1381,
+        0.0359,
+        0.0819
+      ]
+    },
+    "probeHeat.lightsR": {
+      "label": "Probe heat lights (right column)",
+      "kind": "light",
+      "rect": [
+        0.7101,
+        0.1381,
+        0.0364,
+        0.0819
+      ]
+    },
+    "wingAntiIce.switch": {
+      "label": "WING ANTI-ICE switch",
+      "kind": "switch",
+      "rect": [
+        0.5972,
+        0.321,
+        0.0332,
+        0.0343
+      ]
+    },
+    "wingAntiIce.valveLights": {
+      "label": "L VALVE and R VALVE lights",
+      "kind": "light",
+      "rect": [
+        0.5728,
+        0.2948,
+        0.0737,
+        0.0195
+      ],
+      "reviewNote": "The photo shows a third, unlabelled light block just above R VALVE that is not in the FCOM diagram. The lower pair was taken as L VALVE / R VALVE."
+    },
+    "engAntiIce.1": {
+      "label": "ENG ANTI-ICE switch 1",
+      "kind": "switch",
+      "rect": [
+        0.6691,
+        0.3329,
+        0.0332,
+        0.0343
+      ]
+    },
+    "engAntiIce.2": {
+      "label": "ENG ANTI-ICE switch 2",
+      "kind": "switch",
+      "rect": [
+        0.706,
+        0.3329,
+        0.0332,
+        0.0343
+      ]
+    },
+    "engAntiIce.engLights": {
+      "label": "ENG ANTI-ICE lights",
+      "kind": "light",
+      "rect": [
+        0.6645,
+        0.2595,
+        0.0737,
+        0.0195
+      ]
+    },
+    "engAntiIce.cowlLights": {
+      "label": "COWL ANTI-ICE lights",
+      "kind": "light",
+      "rect": [
+        0.6645,
+        0.28,
+        0.0737,
+        0.019
+      ]
+    },
+    "engAntiIce.cowlValveLights": {
+      "label": "COWL VALVE lights",
+      "kind": "light",
+      "rect": [
+        0.6645,
+        0.3,
+        0.0737,
+        0.0181
+      ]
+    },
+    "hyd.eng1": {
+      "label": "HYD PUMPS ENG 1 switch (system A)",
+      "kind": "switch",
+      "rect": [
+        0.576,
+        0.4643,
+        0.0323,
+        0.0476
+      ]
+    },
+    "hyd.elec2": {
+      "label": "HYD PUMPS ELEC 2 switch (system A)",
+      "kind": "switch",
+      "rect": [
+        0.6143,
+        0.4643,
+        0.0323,
+        0.0367
+      ]
+    },
+    "hyd.elec1": {
+      "label": "HYD PUMPS ELEC 1 switch (system B)",
+      "kind": "switch",
+      "rect": [
+        0.6687,
+        0.4643,
+        0.0323,
+        0.0367
+      ]
+    },
+    "hyd.eng2": {
+      "label": "HYD PUMPS ENG 2 switch (system B)",
+      "kind": "switch",
+      "rect": [
+        0.7055,
+        0.4643,
+        0.0323,
+        0.0476
+      ]
+    },
+    "hyd.lowPressElec2": {
+      "label": "ELEC 2 pump LOW PRESSURE light",
+      "kind": "light",
+      "rect": [
+        0.6124,
+        0.4343,
+        0.0359,
+        0.0181
+      ]
+    },
+    "hyd.lowPressElec1": {
+      "label": "ELEC 1 pump LOW PRESSURE light",
+      "kind": "light",
+      "rect": [
+        0.6682,
+        0.4343,
+        0.035,
+        0.0181
+      ]
+    },
+    "press.cabinAltGauge": {
+      "label": "Cabin altitude / differential pressure indicator",
+      "kind": "gauge",
+      "rect": [
+        0.5737,
+        0.6771,
+        0.1198,
+        0.1238
+      ]
+    },
+    "press.cabinClimbGauge": {
+      "label": "Cabin rate of climb indicator",
+      "kind": "gauge",
+      "rect": [
+        0.5917,
+        0.8086,
+        0.0866,
+        0.0895
+      ]
+    },
+    "air.tempSource": {
+      "label": "AIR TEMP source selector",
+      "kind": "selector",
+      "rect": [
+        0.9041,
+        0.1076,
+        0.059,
+        0.061
+      ]
+    },
+    "air.trimAir": {
+      "label": "TRIM AIR switch",
+      "kind": "switch",
+      "rect": [
+        0.8507,
+        0.1676,
+        0.0369,
+        0.0381
+      ]
+    },
+    "air.zoneTempCont": {
+      "label": "ZONE TEMP light, CONT CAB",
+      "kind": "light",
+      "rect": [
+        0.7917,
+        0.2286,
+        0.0382,
+        0.0214
+      ]
+    },
+    "air.zoneTempFwd": {
+      "label": "ZONE TEMP light, FWD CAB",
+      "kind": "light",
+      "rect": [
+        0.8558,
+        0.2286,
+        0.0387,
+        0.0214
+      ]
+    },
+    "air.zoneTempAft": {
+      "label": "ZONE TEMP light, AFT CAB",
+      "kind": "light",
+      "rect": [
+        0.9217,
+        0.2286,
+        0.0382,
+        0.0214
+      ]
+    },
+    "air.tempSelCont": {
+      "label": "CONT CAB temperature selector",
+      "kind": "selector",
+      "rect": [
+        0.7848,
+        0.2581,
+        0.0535,
+        0.0552
+      ]
+    },
+    "air.tempSelFwd": {
+      "label": "FWD CAB temperature selector",
+      "kind": "selector",
+      "rect": [
+        0.8493,
+        0.2581,
+        0.0535,
+        0.0552
+      ]
+    },
+    "air.tempSelAft": {
+      "label": "AFT CAB temperature selector",
+      "kind": "selector",
+      "rect": [
+        0.9138,
+        0.2581,
+        0.0535,
+        0.0552
+      ]
+    },
+    "air.recircL": {
+      "label": "L RECIRC FAN switch",
+      "kind": "switch",
+      "rect": [
+        0.7931,
+        0.3581,
+        0.0369,
+        0.0381
+      ]
+    },
+    "air.recircR": {
+      "label": "R RECIRC FAN switch",
+      "kind": "switch",
+      "rect": [
+        0.9152,
+        0.3581,
+        0.0369,
+        0.0381
+      ]
+    },
+    "air.packL": {
+      "label": "L PACK switch",
+      "kind": "switch",
+      "rect": [
+        0.7834,
+        0.4619,
+        0.035,
+        0.0362
+      ]
+    },
+    "air.packR": {
+      "label": "R PACK switch",
+      "kind": "switch",
+      "rect": [
+        0.923,
+        0.4595,
+        0.035,
+        0.0362
+      ]
+    },
+    "air.isolationValve": {
+      "label": "ISOLATION VALVE switch",
+      "kind": "switch",
+      "rect": [
+        0.8539,
+        0.4776,
+        0.0332,
+        0.0462
+      ]
+    },
+    "air.bleed1": {
+      "label": "Engine BLEED air switch 1",
+      "kind": "switch",
+      "rect": [
+        0.7825,
+        0.58,
+        0.0332,
+        0.0462
+      ]
+    },
+    "air.bleed2": {
+      "label": "Engine BLEED air switch 2",
+      "kind": "switch",
+      "rect": [
+        0.9207,
+        0.58,
+        0.0332,
+        0.0462
+      ]
+    },
+    "air.apuBleed": {
+      "label": "APU BLEED air switch",
+      "kind": "switch",
+      "rect": [
+        0.8346,
+        0.5748,
+        0.0369,
+        0.0381
+      ]
+    },
+    "air.dualBleed": {
+      "label": "DUAL BLEED light",
+      "kind": "light",
+      "rect": [
+        0.7977,
+        0.3224,
+        0.0364,
+        0.02
+      ]
+    },
+    "air.packLightL": {
+      "label": "PACK light (left)",
+      "kind": "light",
+      "rect": [
+        0.8078,
+        0.5071,
+        0.0392,
+        0.0195
+      ]
+    },
+    "air.packLightR": {
+      "label": "PACK light (right)",
+      "kind": "light",
+      "rect": [
+        0.8926,
+        0.5071,
+        0.0387,
+        0.0195
+      ]
+    },
+    "air.wingBodyOvhtL": {
+      "label": "WING-BODY OVERHEAT light (left)",
+      "kind": "light",
+      "rect": [
+        0.8078,
+        0.5276,
+        0.0392,
+        0.019
+      ]
+    },
+    "air.wingBodyOvhtR": {
+      "label": "WING-BODY OVERHEAT light (right)",
+      "kind": "light",
+      "rect": [
+        0.8926,
+        0.5276,
+        0.0387,
+        0.019
+      ]
+    },
+    "air.bleedLightL": {
+      "label": "BLEED light (left)",
+      "kind": "light",
+      "rect": [
+        0.8078,
+        0.5476,
+        0.0392,
+        0.019
+      ]
+    },
+    "air.bleedLightR": {
+      "label": "BLEED light (right)",
+      "kind": "light",
+      "rect": [
+        0.8926,
+        0.5476,
+        0.0387,
+        0.019
+      ]
+    },
+    "press.fltAlt": {
+      "label": "FLT ALT indicator and selector",
+      "kind": "selector",
+      "rect": [
+        0.7806,
+        0.6695,
+        0.0931,
+        0.0838
+      ]
+    },
+    "press.landAlt": {
+      "label": "LAND ALT indicator and selector",
+      "kind": "selector",
+      "rect": [
+        0.7788,
+        0.7543,
+        0.094,
+        0.079
+      ]
+    },
+    "press.modeSelector": {
+      "label": "Pressurization mode selector",
+      "kind": "selector",
+      "rect": [
+        0.8783,
+        0.7819,
+        0.0553,
+        0.0571
+      ]
+    },
+    "press.autoFail": {
+      "label": "AUTO FAIL light",
+      "kind": "light",
+      "rect": [
+        0.794,
+        0.6286,
+        0.0359,
+        0.02
+      ]
+    },
+    "ext.landing": {
+      "label": "LANDING light switches",
+      "kind": "switch",
+      "rect": [
+        0.1668,
+        0.9229,
+        0.0811,
+        0.0305
+      ]
+    },
+    "ext.rwyTurnoffL": {
+      "label": "RUNWAY TURNOFF L switch",
+      "kind": "switch",
+      "rect": [
+        0.276,
+        0.921,
+        0.0332,
+        0.0343
+      ]
+    },
+    "ext.rwyTurnoffR": {
+      "label": "RUNWAY TURNOFF R switch",
+      "kind": "switch",
+      "rect": [
+        0.3106,
+        0.921,
+        0.0332,
+        0.0343
+      ]
+    },
+    "ext.taxi": {
+      "label": "TAXI light switch",
+      "kind": "switch",
+      "rect": [
+        0.3452,
+        0.9195,
+        0.0332,
+        0.0343
+      ]
+    },
+    "ext.logo": {
+      "label": "LOGO light switch",
+      "kind": "switch",
+      "rect": [
+        0.7,
+        0.9219,
+        0.0313,
+        0.0324
+      ]
+    },
+    "ext.position": {
+      "label": "POSITION light switch",
+      "kind": "switch",
+      "rect": [
+        0.747,
+        0.9233,
+        0.0332,
+        0.0343
+      ]
+    },
+    "ext.antiCollision": {
+      "label": "ANTI COLLISION light switch",
+      "kind": "switch",
+      "rect": [
+        0.7982,
+        0.9205,
+        0.0313,
+        0.0324
+      ]
+    },
+    "ext.wing": {
+      "label": "WING light switch",
+      "kind": "switch",
+      "rect": [
+        0.8323,
+        0.9205,
+        0.0313,
+        0.0324
+      ]
+    },
+    "ext.wheelWell": {
+      "label": "WHEEL WELL light switch",
+      "kind": "switch",
+      "rect": [
+        0.8659,
+        0.9205,
+        0.0313,
+        0.0324
+      ]
+    },
+    "eng.ignition": {
+      "label": "Ignition select switch",
+      "kind": "switch",
+      "rect": [
+        0.5244,
+        0.9238,
+        0.0369,
+        0.0381
+      ]
+    },
+    "eng.start1": {
+      "label": "ENGINE START switch 1",
+      "kind": "selector",
+      "rect": [
+        0.4346,
+        0.9181,
+        0.0571,
+        0.059
+      ]
+    },
+    "eng.start2": {
+      "label": "ENGINE START switch 2",
+      "kind": "selector",
+      "rect": [
+        0.5982,
+        0.9181,
+        0.0571,
+        0.059
+      ]
+    }
+  }
+}

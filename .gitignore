@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.vercel/
+*.log
+
+# Source material kept locally only. The FCOM is Boeing Proprietary and must
+# never be committed; the original screenshots are large and are replaced by
+# the optimised asset in public/panels/.
+*.pdf
+/FWD OVERHEAD PANEL.png
+/FWD OVERHEAD PANEL.jpg
+/FWD OVERHEAD PANEL - guided.png
+/AFT OVERHEAD PANEL.png
+/flight_simulator_conversation_transcript.txt
+/claude_flight_training_app_requirements.txt
+/FCOM 737-Max pg160-164.txt

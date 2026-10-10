@@ -1,0 +1,128 @@
+{
+  "id": "preflight-pf-overhead",
+  "title": "Preflight Procedure – PF: forward overhead panel",
+  "summary": "From \"Flight control panel … Check\" to \"ENGINE START switches … OFF\".",
+  "source": {
+    "document": "737 Flight Crew Operations Manual (D6-27370-MAX-RYR(P2))",
+    "chapter": "Normal Procedures – Amplified Procedures, Preflight Procedure – PF ( RYR )",
+    "manualPages": "NP.21.22 – NP.21.26",
+    "pdfPages": "160 – 164",
+    "revision": "July 4, 2023"
+  },
+  "defaultPanel": "fwd-overhead",
+  "steps": [
+    { "id": "fc", "type": "section", "level": 1, "title": "Flight control panel", "target": "Check", "controls": ["region.flightControl"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-switches", "group": "fc", "type": "action", "level": 2, "title": "FLIGHT CONTROL switches", "target": "Guards closed", "controls": ["fltCtl.A", "fltCtl.B"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-low-press", "group": "fc", "type": "check", "level": 3, "title": "Verify that the flight control LOW PRESSURE lights are illuminated.", "controls": ["fltCtl.lowPressA", "fltCtl.lowPressB"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-spoiler", "group": "fc", "type": "action", "level": 2, "title": "Flight SPOILER switches", "target": "Guards closed", "controls": ["spoiler.A", "spoiler.B"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-yaw-damper", "group": "fc", "type": "action", "level": 2, "title": "YAW DAMPER switch", "target": "ON", "controls": ["yawDamper.switch"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-yaw-damper-light", "group": "fc", "type": "check", "level": 3, "title": "Verify that the YAW DAMPER light is extinguished.", "controls": ["yawDamper.light"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-stby-low-qty", "group": "fc", "type": "check", "level": 2, "title": "Verify that the standby hydraulic LOW QUANTITY light is extinguished.", "controls": ["stbyHyd.lowQuantity"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-stby-low-press", "group": "fc", "type": "check", "level": 2, "title": "Verify that the standby hydraulic LOW PRESSURE light is extinguished.", "controls": ["stbyHyd.lowPressure"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-stby-rud-on", "group": "fc", "type": "check", "level": 2, "title": "Verify that the STBY RUD ON light is extinguished.", "controls": ["stbyHyd.stbyRudOn"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-alt-flaps-master", "group": "fc", "type": "action", "level": 2, "title": "ALTERNATE FLAPS master switch", "target": "Guard closed", "controls": ["altFlaps.master"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-alt-flaps-position", "group": "fc", "type": "action", "level": 2, "title": "ALTERNATE FLAPS position switch", "target": "OFF", "controls": ["altFlaps.position"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-feel-diff-press", "group": "fc", "type": "check", "level": 2, "title": "Verify that the FEEL DIFF PRESS light is extinguished.", "controls": ["light.feelDiffPress"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-speed-trim-fail", "group": "fc", "type": "check", "level": 2, "title": "Verify that the SPEED TRIM FAIL light is extinguished.", "controls": ["light.speedTrimFail"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-mach-trim-fail", "group": "fc", "type": "check", "level": 2, "title": "Verify that the MACH TRIM FAIL light is extinguished.", "controls": ["light.machTrimFail"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-auto-slat-fail", "group": "fc", "type": "check", "level": 2, "title": "Verify that the AUTO SLAT FAIL light is extinguished.", "controls": ["light.autoSlatFail"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "fc-spoilers-light", "group": "fc", "type": "check", "level": 2, "title": "Verify that the SPOILERS light is extinguished.", "controls": ["light.spoilers"], "pdfPage": 160, "ref": "NP.21.22" },
+
+    { "id": "nav", "type": "section", "level": 1, "title": "NAVIGATION panel", "target": "Set", "controls": ["region.navigation"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "nav-vhf", "group": "nav", "type": "action", "level": 2, "title": "VHF NAV transfer switch", "target": "NORMAL", "controls": ["nav.vhfNav"], "pdfPage": 160, "ref": "NP.21.22" },
+    { "id": "nav-irs", "group": "nav", "type": "action", "level": 2, "title": "IRS transfer switch", "target": "NORMAL", "controls": ["nav.irs"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "nav-fmc", "group": "nav", "type": "action", "level": 2, "title": "FMC source select switch (as installed)", "target": "NORMAL", "controls": ["nav.fmc"], "pdfPage": 161, "ref": "NP.21.23" },
+
+    { "id": "disp", "type": "section", "level": 1, "title": "DISPLAYS panel", "target": "Set", "controls": ["region.displays"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "disp-source", "group": "disp", "type": "action", "level": 2, "title": "SOURCE selector", "target": "AUTO", "controls": ["displays.source"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "disp-control-panel", "group": "disp", "type": "action", "level": 2, "title": "CONTROL PANEL select switch", "target": "NORMAL", "controls": ["displays.controlPanel"], "pdfPage": 161, "ref": "NP.21.23" },
+
+    { "id": "fuel", "type": "section", "level": 1, "title": "Fuel system", "target": "___ KGS & 4/6 pumps ON", "controls": ["region.fuel"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-crossfeed-verify", "group": "fuel", "type": "action", "level": 2, "title": "CROSSFEED selector", "target": "Verify operation", "controls": ["fuel.crossfeed"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-crossfeed-closed", "group": "fuel", "type": "action", "level": 2, "title": "CROSSFEED selector", "target": "Closed", "controls": ["fuel.crossfeed"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-valve-open", "group": "fuel", "type": "check", "level": 2, "title": "VALVE OPEN light", "target": "Extinguished", "controls": ["fuel.valveOpen"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-eng-valve-closed", "group": "fuel", "type": "check", "level": 2, "title": "ENGINE VALVE CLOSED lights", "target": "Illuminated dim", "controls": ["fuel.engValveClosedL", "fuel.engValveClosedR"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-spar-valve-closed", "group": "fuel", "type": "check", "level": 2, "title": "SPAR VALVE CLOSED lights", "target": "Illuminated dim", "controls": ["fuel.sparValveClosedL", "fuel.sparValveClosedR"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-filter-bypass", "group": "fuel", "type": "check", "level": 2, "title": "FILTER BYPASS lights", "target": "Extinguished", "controls": ["fuel.filterBypassL", "fuel.filterBypassR"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-quantity", "group": "fuel", "type": "check", "level": 2, "title": "Fuel quantity", "target": "Check", "body": ["Verify total fuel quantity meets dispatch requirements. Block Fuel + ___ kgs. (The PM will crosscheck the fuel in the tanks against the BLOCK FUEL on the OFP.)"], "textOnly": "off-panel", "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-pumps", "group": "fuel", "type": "action", "level": 2, "title": "FUEL PUMPS switches (for tanks containing fuel)", "target": "ON", "body": ["Center tank fuel pump switches should be positioned ON only if the fuel quantity in the center tank exceeds 453 kgs. If the Captain deems that the amount of fuel in the center tank is not sufficient to keep the fuel low pressure lights out during takeoff then he may elect to leave the center tank pump switches off until passing FL 100. The flight deck must be manned whenever center tank fuel pump switches are on."], "controls": ["fuel.pumpAft1", "fuel.pumpFwd1", "fuel.pumpFwd2", "fuel.pumpAft2", "fuel.pumpCtrL", "fuel.pumpCtrR"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-low-pressure", "group": "fuel", "type": "check", "level": 3, "title": "LOW PRESSURE lights", "target": "Extinguished", "notes": [{ "kind": "caution", "text": "If a LOW PRESSURE light does not extinguish when the switch is positioned ON, position the switch OFF." }], "controls": ["fuel.lowPress1", "fuel.lowPress2", "fuel.lowPressCtr"], "pdfPage": 161, "ref": "NP.21.23" },
+    { "id": "fuel-summary", "group": "fuel", "type": "note", "level": 1, "title": "When checking the fuel system you should ensure that:", "bullets": ["Required fuel pumps are on", "Crossfeed is serviceable and closed", "Fuel quantity indicators agree with total fuel quantity as displayed on the FMC CDU", "Fuel contents are adequate for the planned flight (reference OFP)"], "textOnly": "info", "pdfPage": 161, "ref": "NP.21.23" },
+
+    { "id": "cab-util", "type": "action", "level": 1, "title": "CAB/UTIL and IFE switches", "target": "ON", "notes": [{ "kind": "note", "text": "Both switches must be ON ( RYR ) airplanes." }], "controls": ["elec.cabUtil", "elec.ifePassSeat"], "pdfPage": 161, "ref": "NP.21.23 – NP.21.24" },
+
+    { "id": "elec", "type": "section", "level": 1, "title": "Electrical system", "target": "Set", "controls": ["elec.standbyPower", "elec.disconnect1", "elec.disconnect2", "elec.busTransfer"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "elec-standby-power", "group": "elec", "type": "action", "level": 2, "title": "STANDBY POWER switch", "target": "AUTO (guard down)", "controls": ["elec.standbyPower"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "elec-disconnect", "group": "elec", "type": "action", "level": 2, "title": "Generator drive DISCONNECT switches", "target": "Guards down", "controls": ["elec.disconnect1", "elec.disconnect2"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "elec-bus-transfer", "group": "elec", "type": "action", "level": 2, "title": "BUS TRANSFER switch", "target": "AUTO (guard down)", "controls": ["elec.busTransfer"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "panel-lights", "type": "action", "level": 1, "title": "CIRCUIT BREAKER and PANEL light controls", "target": "As desired", "controls": ["lights.circuitBreaker", "lights.panel"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "equip-cooling", "type": "action", "level": 1, "title": "EQUIPMENT COOLING switches", "target": "NORMAL", "controls": ["equipCooling.supply", "equipCooling.exhaust"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "equip-cooling-off", "group": "equip-cooling", "type": "check", "level": 2, "title": "OFF lights", "target": "Extinguished", "controls": ["equipCooling.offLights"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "equip-smoke", "type": "check", "level": 1, "title": "EQUIP SMOKE light", "target": "Extinguished", "controls": ["equipCooling.smoke"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "fasten-belts", "type": "action", "level": 1, "title": "FASTEN BELTS switch", "target": "ON", "body": ["Position switch ON once fueling completed."], "controls": ["signs.fastenBelts"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "wipers", "type": "action", "level": 1, "title": "Windshield wiper selectors", "target": "PARK", "controls": ["wiper.L", "wiper.R"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "window-heat", "type": "action", "level": 1, "title": "WINDOW HEAT switches", "target": "ON", "body": ["Position switches ON at least 10 minutes before takeoff."], "controls": ["windowHeat.sideL", "windowHeat.fwdL", "windowHeat.fwdR", "windowHeat.sideR"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "window-heat-overheat", "group": "window-heat", "type": "check", "level": 2, "title": "OVERHEAT lights", "target": "Extinguished", "controls": ["windowHeat.overheatL", "windowHeat.overheatR"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "window-heat-on", "group": "window-heat", "type": "check", "level": 2, "title": "ON lights", "target": "Illuminated (except at high ambient temperatures)", "controls": ["windowHeat.onL", "windowHeat.onR"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "probe-heat", "type": "action", "level": 1, "title": "PROBE HEAT switches", "target": "AUTO", "controls": ["probeHeat.A", "probeHeat.B"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "probe-heat-lights", "group": "probe-heat", "type": "check", "level": 2, "title": "Verify that all lights are illuminated.", "controls": ["probeHeat.lightsL", "probeHeat.lightsR"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "wing-anti-ice", "type": "action", "level": 1, "title": "WING ANTI-ICE switch", "target": "OFF", "controls": ["wingAntiIce.switch"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "wing-anti-ice-valves", "group": "wing-anti-ice", "type": "check", "level": 2, "title": "Verify that the L VALVE and R VALVE lights are extinguished.", "controls": ["wingAntiIce.valveLights"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "eng-anti-ice", "type": "action", "level": 1, "title": "ENGINE ANTI-ICE switches", "target": "OFF", "controls": ["engAntiIce.1", "engAntiIce.2"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "eng-anti-ice-lights", "group": "eng-anti-ice", "type": "check", "level": 2, "title": "Verify that the ENG ANTI-ICE lights are extinguished.", "controls": ["engAntiIce.engLights"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "eng-anti-ice-cowl", "group": "eng-anti-ice", "type": "check", "level": 2, "title": "Verify that the COWL ANTI-ICE lights are extinguished.", "controls": ["engAntiIce.cowlLights"], "pdfPage": 162, "ref": "NP.21.24" },
+    { "id": "eng-anti-ice-cowl-valve", "group": "eng-anti-ice", "type": "check", "level": 2, "title": "Verify that the COWL VALVE lights are extinguished.", "controls": ["engAntiIce.cowlValveLights"], "pdfPage": 162, "ref": "NP.21.24" },
+
+    { "id": "hyd", "type": "section", "level": 1, "title": "Hydraulic pump switches", "target": "ON", "notes": [{ "kind": "note", "text": "Prior to switching on the hydraulic system pump switches, ensure ground personnel are clear of the tow bar or the bypass pin is installed. Do not proceed with the checklist until the hydraulic systems are in the normal configuration." }, { "kind": "note", "text": "Alert ground personnel before pressurizing hydraulic systems." }], "controls": ["hyd.eng1", "hyd.elec2", "hyd.elec1", "hyd.eng2"], "pdfPage": 162, "ref": "NP.21.24 – NP.21.25" },
+    { "id": "hyd-system-a", "group": "hyd", "type": "action", "level": 2, "title": "System A HYDRAULIC PUMPS switches", "target": "ON", "controls": ["hyd.eng1", "hyd.elec2"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-system-b", "group": "hyd", "type": "action", "level": 2, "title": "System B HYDRAULIC PUMPS switches", "target": "ON", "controls": ["hyd.elec1", "hyd.eng2"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-elec-low-press", "group": "hyd", "type": "check", "level": 2, "title": "Electric pump LOW PRESSURE lights", "target": "Extinguished", "controls": ["hyd.lowPressElec2", "hyd.lowPressElec1"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-brake-pressure", "group": "hyd", "type": "check", "level": 2, "title": "Brake pressure", "target": "2800 PSI minimum", "textOnly": "off-panel", "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-mfd-system", "group": "hyd", "type": "action", "level": 2, "title": "MFD SYSTEM switch", "target": "Push", "textOnly": "off-panel", "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-system-pressure", "group": "hyd", "type": "check", "level": 2, "title": "System A and B pressure", "target": "2800 PSI minimum", "textOnly": "off-panel", "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-quantity", "group": "hyd", "type": "check", "level": 2, "title": "Quantity indicators", "target": "No RF indication displayed", "textOnly": "off-panel", "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "hyd-accumulator", "group": "hyd", "type": "check", "level": 2, "title": "Hydraulic Accumulator Pressure Indicator", "target": "Green band", "textOnly": "off-panel", "pdfPage": 163, "ref": "NP.21.25" },
+
+    { "id": "press-ind", "type": "section", "level": 1, "title": "Pressurization indicators", "target": "Check", "controls": ["press.cabinAltGauge", "press.cabinClimbGauge"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "press-ind-diff", "group": "press-ind", "type": "check", "level": 2, "title": "Cabin differential pressure", "target": "Zero", "controls": ["press.cabinAltGauge"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "press-ind-alt", "group": "press-ind", "type": "check", "level": 2, "title": "Cabin altitude", "target": "Field elevation", "controls": ["press.cabinAltGauge"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "press-ind-climb", "group": "press-ind", "type": "check", "level": 2, "title": "Cabin rate of climb", "target": "Zero", "controls": ["press.cabinClimbGauge"], "pdfPage": 163, "ref": "NP.21.25" },
+
+    { "id": "air", "type": "section", "level": 1, "title": "Air conditioning system", "target": "PACKS AUTO, BLEEDS ON", "controls": ["region.airCond"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-temp-source", "group": "air", "type": "action", "level": 2, "title": "AIR TEMPERATURE source selector", "target": "As desired", "controls": ["air.tempSource"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-trim-air", "group": "air", "type": "action", "level": 2, "title": "TRIM AIR switch", "target": "ON", "controls": ["air.trimAir"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-zone-temp", "group": "air", "type": "check", "level": 2, "title": "Verify the ZONE TEMP lights are extinguished.", "controls": ["air.zoneTempCont", "air.zoneTempFwd", "air.zoneTempAft"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-temp-selectors", "group": "air", "type": "action", "level": 2, "title": "Temperature selectors", "target": "As desired", "controls": ["air.tempSelCont", "air.tempSelFwd", "air.tempSelAft"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-recirc", "group": "air", "type": "action", "level": 2, "title": "RECIRC FAN switches", "target": "AUTO", "notes": [{ "kind": "note", "text": "Both RECIRCULATION FAN switches shall be selected to Auto. There is no requirement for crew to select RECIRCULATION FAN switches to OFF unless directed by QRH or Supplementary Procedure." }], "controls": ["air.recircL", "air.recircR"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-packs", "group": "air", "type": "action", "level": 2, "title": "Air conditioning PACK switches", "target": "Both AUTO", "controls": ["air.packL", "air.packR"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-isolation", "group": "air", "type": "action", "level": 2, "title": "ISOLATION VALVE switch", "target": "OPEN", "controls": ["air.isolationValve"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-eng-bleed", "group": "air", "type": "action", "level": 2, "title": "Engine BLEED air switches", "target": "ON", "controls": ["air.bleed1", "air.bleed2"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-apu-bleed", "group": "air", "type": "action", "level": 2, "title": "APU BLEED air switch", "target": "As required", "body": ["ON unless external air is used for start."], "controls": ["air.apuBleed"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-dual-bleed", "group": "air", "type": "check", "level": 3, "title": "If on – Verify that the DUAL BLEED light is illuminated.", "controls": ["air.dualBleed"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-pack-lights", "group": "air", "type": "check", "level": 2, "title": "Verify that the PACK lights are extinguished.", "controls": ["air.packLightL", "air.packLightR"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-wing-body", "group": "air", "type": "check", "level": 2, "title": "Verify that the WING-BODY OVERHEAT lights are extinguished.", "controls": ["air.wingBodyOvhtL", "air.wingBodyOvhtR"], "pdfPage": 163, "ref": "NP.21.25" },
+    { "id": "air-bleed-lights", "group": "air", "type": "check", "level": 2, "title": "Verify that the BLEED lights are extinguished.", "controls": ["air.bleedLightL", "air.bleedLightR"], "pdfPage": 164, "ref": "NP.21.26" },
+
+    { "id": "press-sys", "type": "section", "level": 1, "title": "Pressurization system", "target": "Set", "controls": ["press.fltAlt", "press.landAlt"], "pdfPage": 164, "ref": "NP.21.26" },
+    { "id": "press-flt-alt", "group": "press-sys", "type": "action", "level": 2, "title": "FLIGHT ALTITUDE indicator", "target": "Filed level or lower if performance limited or level capped.", "controls": ["press.fltAlt"], "pdfPage": 164, "ref": "NP.21.26" },
+    { "id": "press-land-alt", "group": "press-sys", "type": "action", "level": 2, "title": "LANDING ALTITUDE indicator", "target": "Destination field elevation", "controls": ["press.landAlt"], "pdfPage": 164, "ref": "NP.21.26" },
+
+    { "id": "press-mode", "type": "action", "level": 1, "title": "Pressurization mode selector", "target": "AUTO", "controls": ["press.modeSelector"], "pdfPage": 164, "ref": "NP.21.26" },
+    { "id": "press-auto-fail", "group": "press-mode", "type": "check", "level": 2, "title": "AUTOMATIC FAIL light", "target": "Extinguished", "controls": ["press.autoFail"], "pdfPage": 164, "ref": "NP.21.26" },
+
+    { "id": "ext-lights", "type": "action", "level": 1, "title": "Exterior light switches", "target": "Set", "body": ["Navigation lights must be on at all times when AC power is connected. Wheel well lights will be selected on for walkarounds.", "Logo lights will be on during the hours of darkness below FL100.", "Caution when using wing lights as they can cause distraction to other ground traffic."], "controls": ["ext.landing", "ext.rwyTurnoffL", "ext.rwyTurnoffR", "ext.taxi", "ext.logo", "ext.position", "ext.antiCollision", "ext.wing", "ext.wheelWell"], "pdfPage": 164, "ref": "NP.21.26" },
+
+    { "id": "ignition", "type": "action", "level": 1, "title": "Ignition switches", "target": "IGN L or R", "body": ["Select IGN R when operating through manned maintenance stations for the first flight of the day and alternate thereafter."], "controls": ["eng.ignition"], "pdfPage": 164, "ref": "NP.21.26" },
+
+    { "id": "engine-start", "type": "action", "level": 1, "title": "ENGINE START switches", "target": "OFF", "controls": ["eng.start1", "eng.start2"], "pdfPage": 164, "ref": "NP.21.26" }
+  ]
+}
