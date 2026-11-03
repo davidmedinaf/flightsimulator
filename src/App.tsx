@@ -119,7 +119,12 @@ export default function App({ onExit }: { onExit?: () => void }) {
     return (
       <div className="home">
         <main className="home-card">
-          <p className="eyebrow">Proof of concept · 737 MAX flight simulator</p>
+          {onExit && (
+            <button className="btn btn-quiet back-link" onClick={onExit}>
+              ← Back to exercises
+            </button>
+          )}
+          <p className="eyebrow">Classic trainer · 737 MAX flight simulator</p>
           <h1>Procedure Trainer</h1>
           <p className="lead">
             Practise a flight deck procedure on a schematic panel you can operate: switches move when you tap them and
@@ -160,7 +165,7 @@ export default function App({ onExit }: { onExit?: () => void }) {
             )}
             {onExit && (
               <button className="btn" onClick={onExit}>
-                All exercises
+                Back to exercises
               </button>
             )}
             <button className="btn" onClick={() => setScreen('explore')}>
@@ -268,8 +273,13 @@ export default function App({ onExit }: { onExit?: () => void }) {
               {guided ? 'All steps' : 'All sub-panels'}
             </button>
             <button className="btn btn-quiet" onClick={() => setScreen('home')}>
-              Home
+              Trainer home
             </button>
+            {onExit && (
+              <button className="btn btn-quiet" onClick={onExit}>
+                Exit trainer
+              </button>
+            )}
             <button className="btn btn-quiet" onClick={() => setConfirmRestart(true)}>
               Restart
             </button>
@@ -311,7 +321,7 @@ export default function App({ onExit }: { onExit?: () => void }) {
                 {guided ? 'Back to the last step' : 'Back to the last sub-panel'}
               </button>
               <button className="btn btn-quiet" onClick={() => setScreen('home')}>
-                Home
+                Trainer home
               </button>
             </div>
             <p className="disclaimer">{DISCLAIMER}</p>

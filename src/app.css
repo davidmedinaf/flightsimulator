@@ -1107,3 +1107,9 @@ button.flow-node:hover {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.back-link {
+  justify-self: start;
+  margin-bottom: 12px;
+  padding-left: 0;
+}
