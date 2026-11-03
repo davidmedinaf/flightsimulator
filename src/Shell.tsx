@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import App from './App';
 import { logOut, useAuth } from './auth';
 import { Explorer } from './components/Explorer';
@@ -32,6 +32,18 @@ export function Shell() {
   const { user, profile, loading } = useAuth();
   const [route, setRoute] = useState(readRoute);
   const [unread, setUnread] = useState(0);
+  const bar = useRef<HTMLElement>(null);
+
+  // page headers stick just below the menu bar, which can wrap onto two lines
+  useLayoutEffect(() => {
+    const el = bar.current;
+    if (!el) return;
+    const set = () => document.documentElement.style.setProperty('--bar-h', `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  });
 
   useEffect(() => {
     const on = () => setRoute(readRoute());
@@ -87,7 +99,7 @@ export function Shell() {
 
   return (
     <div className="shell">
-      <header className="shell-bar">
+      <header className="shell-bar" ref={bar}>
         <a href="#/exercises" className="brand">
           Procedure Trainer
         </a>

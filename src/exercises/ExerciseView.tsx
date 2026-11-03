@@ -135,16 +135,6 @@ export function ExerciseView({ id }: { id: string }) {
               <b>Release note, v{pub.version}.</b> {pub.releaseNote}
             </p>
           )}
-          {pub && (
-            <div className="start-cta">
-              <div>
-                <b>Do the exercise on the panel.</b> Each action shows what to do and checks it as you go; at each decision your answer chooses the next step.
-              </div>
-              <a className="btn btn-primary" href={`#/play/${id}`}>
-                Start exercise
-              </a>
-            </div>
-          )}
           <h3>Steps</h3>
           <p className="muted small">Tap a step to read it.</p>
           <div className="steps-read">

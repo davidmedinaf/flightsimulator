@@ -33,6 +33,8 @@ function Steps() {
   );
 }
 
+// no menu bar here, so page headers stick to the very top
+document.documentElement.style.setProperty('--bar-h', '0px');
 const view = location.hash.slice(1) || 'editor';
 createRoot(document.getElementById('root')!).render(
   <AuthContext.Provider value={{ user: null, profile, loading: false, refresh: async () => {} }}>

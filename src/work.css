@@ -184,3 +184,22 @@
   padding-top: 4px;
   padding-bottom: 4px;
 }
+
+/* page headers stay visible while the page scrolls */
+.shell-main .page-head {
+  position: sticky;
+  top: var(--bar-h, 61px);
+  z-index: 8;
+  margin: -24px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
+  padding: 16px max(16px, env(safe-area-inset-left, 0px)) 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.shell-main .page-head h1 {
+  margin-bottom: 2px;
+}
+
+.shell-main .page-head .lead {
+  margin: 4px 0 0;
+}

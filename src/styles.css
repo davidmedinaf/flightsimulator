@@ -52,6 +52,11 @@ p {
 
 .btn {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
   min-height: 52px;
   padding: 0 22px;
   border: 1px solid var(--line);
