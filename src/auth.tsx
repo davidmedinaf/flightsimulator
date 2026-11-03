@@ -24,9 +24,9 @@ interface AuthState {
   refresh: () => Promise<void>;
 }
 
-const Ctx = createContext<AuthState>({ user: null, profile: null, loading: true, refresh: async () => {} });
+export const AuthContext = createContext<AuthState>({ user: null, profile: null, loading: true, refresh: async () => {} });
 
-export const useAuth = () => useContext(Ctx);
+export const useAuth = () => useContext(AuthContext);
 
 let pendingName: { name: string; surname: string } | null = null;
 
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (auth.currentUser) setProfile(await loadProfile(auth.currentUser.uid));
   };
 
-  return <Ctx.Provider value={{ user, profile, loading, refresh }}>{children}</Ctx.Provider>;
+  return <AuthContext.Provider value={{ user, profile, loading, refresh }}>{children}</AuthContext.Provider>;
 }
 
 export async function signUp(email: string, password: string, name: string, surname: string) {

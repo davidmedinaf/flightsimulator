@@ -4,6 +4,7 @@ import { AuthProvider } from './auth';
 import { Shell } from './Shell';
 import './styles.css';
 import './app.css';
+import './work.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,0 +1,186 @@
+/* Exercise panels (zoomable), the editor's step layout and the readable step details. */
+
+.work {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.builder .work,
+.play .work {
+  height: min(80vh, 860px);
+  min-height: 440px;
+}
+
+.work-tabs {
+  align-self: flex-start;
+}
+
+.work-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-radius: var(--radius);
+  background: var(--stage);
+  -webkit-overflow-scrolling: touch;
+}
+
+.work-layer {
+  position: relative;
+  margin: 0 auto;
+}
+
+.work-layer .schematic {
+  height: auto;
+}
+
+.work-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.work-bar .panel-name {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.work-bar .zoom {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+/* the editor: a narrow flowchart and form, the panel takes the rest */
+.builder.is-open {
+  grid-template-columns: minmax(150px, 190px) minmax(0, 1fr) minmax(270px, 320px);
+}
+
+.builder.is-open.flow-hidden {
+  grid-template-columns: minmax(0, 1fr) minmax(270px, 320px);
+}
+
+.builder.flow-hidden .flow-side {
+  display: none;
+}
+
+.flow-show {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.node-form {
+  max-height: min(84vh, 900px);
+}
+
+@media (max-width: 1100px) {
+  .builder.is-open,
+  .builder.is-open.flow-hidden {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+  }
+}
+
+@media (max-width: 760px) {
+  .builder.is-open,
+  .builder.is-open.flow-hidden {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* exercise page */
+.start-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0 4px;
+  padding: 14px 16px;
+  border: 1px solid #f0c46a;
+  border-radius: 12px;
+  background: #fff6e2;
+}
+
+.start-cta div {
+  flex: 1 1 280px;
+}
+
+.steps-read {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+  gap: 16px;
+  align-items: start;
+}
+
+.steps-read:has(> :only-child) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.node-details {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.node-details h3,
+.node-details p {
+  margin: 0;
+}
+
+.sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.answer-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+@media (max-width: 1100px) {
+  .steps-read {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.page.editor {
+  max-width: none;
+}
+
+.meta-folded {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.work-bar .panel-name {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: 0;
+}
+
+.flow-node {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}

@@ -3,6 +3,7 @@ import { useAuth } from '../auth';
 import { go } from '../Shell';
 import { day, panelName } from './ExerciseList';
 import { Flowchart } from './Flowchart';
+import { NodeDetails } from './NodeDetails';
 import { badLanguage } from './language';
 import { COMMENT_LIMIT, type Draft, type Profile, type Published, type Review } from './model';
 import { deleteExercise, deleteReview, discardDraft, draftFromPublished, listProfiles, loadDraft, loadPublished, notifyAdmins, saveReview, setSharing, watchReviews } from './store';
@@ -34,6 +35,7 @@ export function ExerciseView({ id }: { id: string }) {
   const [users, setUsers] = useState<Profile[]>([]);
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null);
   const [confirm, setConfirm] = useState<'edit' | 'delete' | 'discard' | null>(null);
+  const [step, setStep] = useState<string | null>(null);
 
   useEffect(() => {
     loadPublished(id)
@@ -133,9 +135,25 @@ export function ExerciseView({ id }: { id: string }) {
               <b>Release note, v{pub.version}.</b> {pub.releaseNote}
             </p>
           )}
+          {pub && (
+            <div className="start-cta">
+              <div>
+                <b>Do the exercise on the panel.</b> Each action shows what to do and checks it as you go; at each decision your answer chooses the next step.
+              </div>
+              <a className="btn btn-primary" href={`#/play/${id}`}>
+                Start exercise
+              </a>
+            </div>
+          )}
           <h3>Steps</h3>
-          <div className="flow-wrap">
-            <Flowchart nodes={shown.content.nodes} />
+          <p className="muted small">Tap a step to read it.</p>
+          <div className="steps-read">
+            <div className="flow-wrap">
+              <Flowchart nodes={shown.content.nodes} selected={step} onSelect={setStep} compact />
+            </div>
+            {step && shown.content.nodes.find((n) => n.id === step) && (
+              <NodeDetails node={shown.content.nodes.find((n) => n.id === step)!} nodes={shown.content.nodes} onSelect={setStep} />
+            )}
           </div>
         </section>
 

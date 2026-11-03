@@ -41,7 +41,7 @@ export function Player({ id, draft }: Props) {
   return <Run id={id} name={meta.name} content={meta.content} draft={Boolean(draft)} />;
 }
 
-function Run({ id, name, content, draft }: { id: string; name: string; content: ExerciseContent; draft: boolean }) {
+export function Run({ id, name, content, draft }: { id: string; name: string; content: ExerciseContent; draft: boolean }) {
   const byId = useMemo(() => new Map(content.nodes.map((n) => [n.id, n])), [content]);
   const first = (byId.get('start') as { next?: string } | undefined)?.next ?? 'end';
   const [sims, setSims] = useState<Record<string, SimState>>(() => startSims(content.panels, content.initial));

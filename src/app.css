@@ -56,7 +56,7 @@
 .nav-item:hover,
 .me:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .nav-item.is-active,
@@ -95,7 +95,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #2b3946;
+  background: #e3e8ed;
   color: var(--text);
   font-weight: 700;
 }
@@ -205,14 +205,14 @@
 }
 
 .btn.is-on {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
 }
 
 .btn-rec {
-  background: #4a1414;
+  background: #fde4e1;
   border-color: var(--red);
-  color: #ffd9d6;
+  color: #a32b20;
 }
 
 .icon {
@@ -260,8 +260,8 @@ select {
   font: inherit;
   font-weight: 400;
   color: var(--text);
-  background: #0f151a;
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid #c2cbd4;
   border-radius: 8px;
   padding: 9px 11px;
   min-height: 40px;
@@ -311,16 +311,16 @@ input[readonly] {
   margin: 0;
   padding: 8px 12px;
   border-radius: 8px;
-  background: #3a1616;
-  color: #ffd2cd;
+  background: #fde4e1;
+  color: #8e2219;
 }
 
 .form-info {
   margin: 0;
   padding: 8px 12px;
   border-radius: 8px;
-  background: #13301f;
-  color: #c9f3d8;
+  background: #dcf3e5;
+  color: #17633a;
 }
 
 .auth-card {
@@ -359,7 +359,7 @@ label.toggle {
   width: 42px;
   height: 24px;
   border-radius: 999px;
-  background: #33414d;
+  background: #c4cdd5;
   flex: none;
   transition: background 0.15s;
 }
@@ -465,7 +465,7 @@ label.toggle.is-readonly {
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 10px 30px rgba(20, 30, 40, 0.15);
 }
 
 .multi-menu label {
@@ -512,7 +512,7 @@ label.toggle.is-readonly {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: #1d2832;
+  background: var(--surface-2);
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -532,7 +532,7 @@ label.toggle.is-readonly {
 }
 
 .table tr:hover td {
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .table .is-muted td {
@@ -569,7 +569,7 @@ label.toggle.is-readonly {
 .chip {
   padding: 2px 8px;
   border-radius: 999px;
-  background: #22303b;
+  background: #e7ecf0;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -583,18 +583,18 @@ label.toggle.is-readonly {
 }
 
 .status-public {
-  background: #13301f;
-  color: #9fe7bd;
+  background: #dcf3e5;
+  color: #17633a;
 }
 
 .status-private {
-  background: #1c2a3a;
-  color: #a9d1ff;
+  background: #dde9f8;
+  color: #1d4f8f;
 }
 
 .status-draft {
-  background: #3a2e12;
-  color: #ffd98a;
+  background: #fbefd2;
+  color: #7a5300;
 }
 
 /* ---------- exercise page ---------- */
@@ -616,7 +616,7 @@ label.toggle.is-readonly {
   max-height: 70vh;
   padding: 8px;
   border-radius: 10px;
-  background: #0f151a;
+  background: var(--subtle);
 }
 
 .seg {
@@ -624,7 +624,7 @@ label.toggle.is-readonly {
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #0f151a;
+  background: var(--subtle);
   justify-self: start;
 }
 
@@ -661,7 +661,7 @@ label.toggle.is-readonly {
 .stars {
   display: inline-flex;
   gap: 2px;
-  color: #4b5866;
+  color: #c3ccd4;
   font-size: 18px;
 }
 
@@ -676,7 +676,7 @@ label.toggle.is-readonly {
 }
 
 .stars .on {
-  color: #ffc53d;
+  color: #e6a100;
 }
 
 .stars button:disabled {
@@ -753,9 +753,9 @@ label.toggle.is-readonly {
 .flow-label {
   font-size: 12px;
   font-weight: 700;
-  fill: #c8d2da;
+  fill: #44515d;
   paint-order: stroke;
-  stroke: #0f151a;
+  stroke: var(--subtle);
   stroke-width: 4px;
 }
 
@@ -767,9 +767,9 @@ label.toggle.is-readonly {
   justify-content: center;
   gap: 2px;
   padding: 6px 12px;
-  border: 1.5px solid #3b4b58;
+  border: 1.5px solid #b9c4ce;
   border-radius: 10px;
-  background: #182129;
+  background: var(--surface);
   color: var(--text);
   font: inherit;
   text-align: left;
@@ -781,7 +781,7 @@ button.flow-node {
 }
 
 button.flow-node:hover {
-  border-color: #6b7f8f;
+  border-color: #7d8c99;
 }
 
 .flow-node strong {
@@ -812,22 +812,22 @@ button.flow-node:hover {
 .flow-node.kind-end {
   align-items: center;
   border-radius: 999px;
-  background: #1f2c22;
-  border-color: #3f6b4c;
+  background: #e5f4ea;
+  border-color: #7fb895;
 }
 
 .flow-node.kind-decision {
-  border-color: #6c5a2a;
-  background: #231f14;
+  border-color: #d9b45a;
+  background: #fdf6e3;
 }
 
 .flow-node.is-done {
-  border-color: #5e6a3a;
+  border-color: #a9b98a;
   opacity: 0.75;
 }
 
 .flow-node.is-selected {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
   box-shadow: 0 0 0 2px var(--accent);
   opacity: 1;
 }
@@ -894,7 +894,7 @@ button.flow-node:hover {
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #0f151a;
+  background: var(--subtle);
 }
 
 .builder:not(.is-open) .flow-scroll {
@@ -906,8 +906,8 @@ button.flow-node:hover {
   margin: 0;
   padding: 10px 12px 10px 28px;
   border-radius: 10px;
-  background: #2b2312;
-  color: #ffdf9e;
+  background: #fdf3dc;
+  color: #6d4a00;
   font-size: 14px;
 }
 
@@ -950,7 +950,7 @@ button.flow-node:hover {
   padding: 7px 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #121a20;
+  background: var(--surface);
 }
 
 .substeps .n {
@@ -960,13 +960,13 @@ button.flow-node:hover {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #2b3946;
+  background: #e3e8ed;
   font-size: 13px;
   font-weight: 700;
 }
 
 .substeps li.is-current {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 
 .substeps li.is-current .n {
@@ -1006,7 +1006,7 @@ button.flow-node:hover {
 .publish {
   display: grid;
   gap: 10px;
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 
 /* ---------- player ---------- */
@@ -1029,7 +1029,7 @@ button.flow-node:hover {
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #0f151a;
+  background: var(--subtle);
 }
 
 .play-card .pane-body {
@@ -1052,8 +1052,8 @@ button.flow-node:hover {
 .result {
   padding: 10px 12px;
   border-radius: 8px;
-  background: #13301f;
-  color: #d4f5e1;
+  background: #dcf3e5;
+  color: #17633a;
 }
 
 .work-tabs {

@@ -35,6 +35,12 @@ export function Editor({ id }: { id: string | null }) {
   const [open, setOpen] = useState<string | null>(null); // node id, or 'initial'
   const [sims, setSims] = useState<Record<string, SimState>>({});
   const [publishing, setPublishing] = useState(false);
+  const [flowHidden, setFlowHidden] = useState(false);
+  const [metaOpen, setMetaOpen] = useState(true);
+  // while a step is open, the name and description fold away so the panel gets the room
+  useEffect(() => {
+    if (open) setMetaOpen(false);
+  }, [open]);
 
   useEffect(() => {
     if (!id) {
@@ -133,8 +139,8 @@ export function Editor({ id }: { id: string | null }) {
     setOpen(null);
   }
 
-  async function save(quiet = false) {
-    if (!draft!.name.trim()) return setMsg({ text: 'Give the exercise a name first.', error: true });
+  async function save(quiet = false): Promise<void> {
+    if (!draft!.name.trim()) return void setMsg({ text: 'Give the exercise a name first.', error: true });
     try {
       await saveDraft(draft!);
       setDirty(false);
@@ -194,6 +200,16 @@ export function Editor({ id }: { id: string | null }) {
         />
       )}
 
+      {!metaOpen && ready ? (
+        <section className="card-block meta-folded">
+          <span>
+            <b>{draft.name}</b> · {c.panels.map((pid) => panels[pid].name).join(', ')}
+          </span>
+          <button className="btn btn-sm btn-quiet" onClick={() => setMetaOpen(true)}>
+            Edit name, description and panels
+          </button>
+        </section>
+      ) : (
       <section className="card-block meta">
         <div className="form-row">
           <label className="grow">
@@ -219,11 +235,17 @@ export function Editor({ id }: { id: string | null }) {
           ))}
         </fieldset>
       </section>
+      )}
 
       {!ready ? (
         <p className="empty">Give the exercise a name and choose its panels to start adding steps.</p>
       ) : (
-        <div className={`builder${open ? ' is-open' : ''}`}>
+        <div className={`builder${open ? ' is-open' : ''}${open && flowHidden ? ' flow-hidden' : ''}`}>
+          {open && flowHidden && (
+            <button className="btn btn-sm flow-show" onClick={() => setFlowHidden(false)}>
+              Show flowchart
+            </button>
+          )}
           <aside className="flow-side">
             <div className="flow-tools">
               <button className="btn btn-sm" onClick={() => addNode('action')}>
@@ -235,6 +257,11 @@ export function Editor({ id }: { id: string | null }) {
               <button className={`btn btn-sm btn-quiet${open === 'initial' ? ' is-on' : ''}`} onClick={() => setOpen(open === 'initial' ? null : 'initial')}>
                 Initial state
               </button>
+              {open && (
+                <button className="btn btn-sm btn-quiet" onClick={() => setFlowHidden(true)}>
+                  Hide
+                </button>
+              )}
             </div>
             <div className="flow-scroll">
               <Flowchart nodes={c.nodes} selected={open} onSelect={(nid) => setOpen(nid === 'end' ? null : nid)} compact={Boolean(open)} />
@@ -287,6 +314,8 @@ export function Editor({ id }: { id: string | null }) {
               onAddAfter={(kind) => addNode(kind, current.id)}
               onDelete={() => removeNode(current.id)}
               onClose={() => setOpen(null)}
+              onSave={save}
+              dirty={dirty}
             />
           )}
           {current?.kind === 'decision' && (
@@ -300,6 +329,8 @@ export function Editor({ id }: { id: string | null }) {
               onChange={setNode}
               onDelete={() => removeNode(current.id)}
               onClose={() => setOpen(null)}
+              onSave={save}
+              dirty={dirty}
             />
           )}
         </div>
@@ -369,6 +400,8 @@ function ActionForm({
   onAddAfter,
   onDelete,
   onClose,
+  onSave,
+  dirty,
 }: {
   node: ActionNode;
   options: ExerciseNode[];
@@ -379,6 +412,8 @@ function ActionForm({
   onAddAfter: (kind: 'action' | 'decision') => void;
   onDelete: () => void;
   onClose: () => void;
+  onSave: () => Promise<void>;
+  dirty: boolean;
 }) {
   const [recording, setRecording] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -412,10 +447,6 @@ function ActionForm({
         <label>
           Name
           <input id="ac-name" value={node.name} onChange={(e) => onChange({ ...node, name: e.target.value })} placeholder="e.g. Set the yaw damper" />
-        </label>
-        <label>
-          Short text for the flowchart
-          <input id="ac-sum" value={node.summary ?? ''} maxLength={80} onChange={(e) => onChange({ ...node, summary: e.target.value })} />
         </label>
         <label>
           Description (optional): what this action is for
@@ -479,8 +510,11 @@ function ActionForm({
           </button>
         </div>
         <div className="form-actions">
-          <button className="btn btn-quiet" onClick={onClose}>
-            Close
+          <button className="btn btn-primary" onClick={() => onSave()}>
+            {dirty ? 'Save' : 'Saved'}
+          </button>
+          <button className="btn" onClick={async () => (await onSave(), onClose())}>
+            Save and close
           </button>
           {confirmDelete ? (
             <span className="confirm-inline">
@@ -512,6 +546,8 @@ function DecisionForm({
   onChange,
   onDelete,
   onClose,
+  onSave,
+  dirty,
 }: {
   node: DecisionNode;
   options: ExerciseNode[];
@@ -521,6 +557,8 @@ function DecisionForm({
   onChange: (n: DecisionNode) => void;
   onDelete: () => void;
   onClose: () => void;
+  onSave: () => Promise<void>;
+  dirty: boolean;
 }) {
   const [picking, setPicking] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -554,10 +592,6 @@ function DecisionForm({
         <label>
           Question shown to the user
           <input id="dc-q" value={node.question} onChange={(e) => onChange({ ...node, question: e.target.value })} />
-        </label>
-        <label>
-          Short text for the flowchart
-          <input id="dc-sum" value={node.summary ?? ''} maxLength={80} onChange={(e) => onChange({ ...node, summary: e.target.value })} />
         </label>
         <label>
           Description (optional)
@@ -633,8 +667,11 @@ function DecisionForm({
         )}
 
         <div className="form-actions">
-          <button className="btn btn-quiet" onClick={onClose}>
-            Close
+          <button className="btn btn-primary" onClick={() => onSave()}>
+            {dirty ? 'Save' : 'Saved'}
+          </button>
+          <button className="btn" onClick={async () => (await onSave(), onClose())}>
+            Save and close
           </button>
           {confirmDelete ? (
             <span className="confirm-inline">

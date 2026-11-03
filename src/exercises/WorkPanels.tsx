@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { elementControl, elementLabel, panels } from '../data';
-import { PanelView, type Highlight, type Tone } from '../components/PanelView';
+import type { Tone } from '../components/PanelView';
+import { Schematic } from '../components/Schematic';
 import { initialSim, operate, stateWord, type SimState } from '../sim';
 import { usePanel } from '../usePanel';
 import type { PanelSetup, SubStep } from './model';
@@ -39,7 +40,13 @@ interface Props {
   onActive?: (id: string) => void;
 }
 
-/** The panels of an exercise, one shown at a time, with tabs to move between them. */
+const MAX_ZOOM = 5;
+
+/**
+ * The panels of an exercise, one shown at a time, with tabs to move between
+ * them. The panel can be zoomed and scrolled; zooming resizes the drawing
+ * rather than scaling it, so it stays sharp.
+ */
 export function WorkPanels({ panelIds, sims, setSims, onAction, onLightTap, highlight = [], active, onActive }: Props) {
   const [own, setOwn] = useState(panelIds[0]);
   const current = active && panelIds.includes(active) ? active : panelIds.includes(own) ? own : panelIds[0];
@@ -48,18 +55,55 @@ export function WorkPanels({ panelIds, sims, setSims, onAction, onLightTap, high
   const setSim = (u: (s: SimState) => SimState) => setSims((all) => ({ ...all, [current]: u(all[current]) }));
   const p = usePanel(panel, sim, setSim);
 
-  const highlights: Highlight[] = highlight
-    .filter((h) => h.panel === current)
-    .map((h) => ({ control: elementControl(panel, h.control)!, tone: h.tone, pulse: true }))
-    .filter((h) => h.control);
+  const stage = useRef<HTMLDivElement>(null);
+  const [fit, setFit] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const view = panel.schematic.view ?? [0, 0, panel.schematic.width, panel.schematic.height];
+  useLayoutEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+    const measure = () => setFit(Math.max(200, Math.min(el.clientWidth, (el.clientHeight * view[2]) / view[3])));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [view]);
 
-  const pick = (id: string) => (onActive ? onActive(id) : setOwn(id));
+  const mine = highlight.filter((h) => h.panel === current);
+  const marks = mine.map((h) => ({ h, c: elementControl(panel, h.control) })).filter((m) => m.c);
+  const markKey = mine.map((h) => h.control).join(',');
+
+  // bring a highlighted control into view when it changes
+  useEffect(() => {
+    const el = stage.current?.querySelector('.highlight');
+    el?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+  }, [markKey, zoom, current]);
+
+  function setZoomAt(z: number) {
+    const el = stage.current;
+    const next = Math.min(MAX_ZOOM, Math.max(1, z));
+    if (!el) return setZoom(next);
+    // keep the centre of the view in place
+    const cx = (el.scrollLeft + el.clientWidth / 2) / (fit * zoom);
+    const cy = (el.scrollTop + el.clientHeight / 2) / ((fit * zoom * view[3]) / view[2]);
+    setZoom(next);
+    requestAnimationFrame(() => {
+      el.scrollLeft = cx * fit * next - el.clientWidth / 2;
+      el.scrollTop = cy * ((fit * next * view[3]) / view[2]) - el.clientHeight / 2;
+    });
+  }
+
+  const pick = (id: string) => {
+    if (onActive) onActive(id);
+    else setOwn(id);
+    setZoom(1);
+  };
   const elsewhere = highlight.filter((h) => h.panel !== current).map((h) => h.panel);
 
   return (
-    <section className="panel-area work">
+    <section className="work">
       {panelIds.length > 1 && (
-        <div className="tabs work-tabs" role="tablist">
+        <div className="tabs work-tabs" role="tablist" aria-label="Panels of this exercise">
           {panelIds.map((id) => (
             <button key={id} role="tab" aria-selected={id === current} className={`tab${id === current ? ' is-active' : ''}`} onClick={() => pick(id)}>
               {panels[id].name}
@@ -68,36 +112,69 @@ export function WorkPanels({ panelIds, sims, setSims, onAction, onLightTap, high
           ))}
         </div>
       )}
-      <PanelView
-        panel={panel}
-        highlights={highlights}
-        mode="full"
-        sim={sim}
-        levels={p.levels}
-        onOperate={(id) => {
-          const sw = panel.schematic.switches.find((s) => s.id === id);
-          p.onOperate(id);
-          if (!onAction || !sw) return;
-          if (sw.style === 'select') onAction({ panel: current, control: id, value: 'PUSH', label: subStepLabel(current, id, 'PUSH') });
-          else {
-            const value = operate(panel.schematic, sim, id).pos[id];
-            onAction({ panel: current, control: id, value, label: subStepLabel(current, id, value) });
-          }
+      <div
+        className="work-stage"
+        ref={stage}
+        onWheel={(e) => {
+          if (!e.ctrlKey) return;
+          e.preventDefault();
+          setZoomAt(zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15));
         }}
-        onPress={(id) => {
-          p.onPress(id);
-          onAction?.({ panel: current, control: id, value: 'PUSH', label: subStepLabel(current, id, 'PUSH') });
-        }}
-        onRelease={p.onRelease}
-        onLight={(id) => {
-          p.onLight(id);
-          onLightTap?.(current, id);
-        }}
-      />
-      <div className="panel-chrome">
+      >
+        {fit > 0 && (
+          <div className="work-layer" style={{ width: Math.floor(fit * zoom) - 2 }}>
+            <Schematic
+              schematic={panel.schematic}
+              sim={sim}
+              levels={p.levels}
+              onOperate={(id) => {
+                const sw = panel.schematic.switches.find((s) => s.id === id);
+                p.onOperate(id);
+                if (!onAction || !sw) return;
+                if (sw.style === 'select') onAction({ panel: current, control: id, value: 'PUSH', label: subStepLabel(current, id, 'PUSH') });
+                else {
+                  const value = operate(panel.schematic, sim, id).pos[id];
+                  onAction({ panel: current, control: id, value, label: subStepLabel(current, id, value) });
+                }
+              }}
+              onPress={(id) => {
+                p.onPress(id);
+                onAction?.({ panel: current, control: id, value: 'PUSH', label: subStepLabel(current, id, 'PUSH') });
+              }}
+              onRelease={p.onRelease}
+              onLight={(id) => {
+                p.onLight(id);
+                onLightTap?.(current, id);
+              }}
+            />
+            {marks.map(({ h, c }, i) => (
+              <div
+                key={`${h.control}-${i}`}
+                className={`highlight highlight-${c!.kind} tone-${h.tone} is-pulsing`}
+                style={{ left: `${c!.rect[0] * 100}%`, top: `${c!.rect[1] * 100}%`, width: `${c!.rect[2] * 100}%`, height: `${c!.rect[3] * 100}%` }}
+              >
+                <span />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="work-bar">
         <span className="panel-name" aria-live="polite">
           {p.effect?.message ?? p.lastOp ?? `${panel.name}: tap a switch to move it, or a light to change how it looks`}
         </span>
+        <div className="zoom">
+          <button className="btn btn-sm" aria-label="Zoom out" onClick={() => setZoomAt(zoom / 1.4)} disabled={zoom <= 1}>
+            −
+          </button>
+          <span>{Math.round(zoom * 100)}%</span>
+          <button className="btn btn-sm" aria-label="Zoom in" onClick={() => setZoomAt(zoom * 1.4)} disabled={zoom >= MAX_ZOOM}>
+            +
+          </button>
+          <button className="btn btn-sm btn-quiet" onClick={() => setZoom(1)} disabled={zoom === 1}>
+            Fit
+          </button>
+        </div>
       </div>
     </section>
   );

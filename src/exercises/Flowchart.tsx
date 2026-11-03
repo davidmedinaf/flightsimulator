@@ -54,8 +54,8 @@ function layout(nodes: ExerciseNode[]) {
 const KIND = { start: 'Start', end: 'End', action: 'Action', decision: 'Decision' } as const;
 
 export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
-  const W = compact ? 200 : 240;
-  const H = compact ? 58 : 70;
+  const W = compact ? 180 : 220;
+  const H = compact ? 50 : 56;
   const GX = 28;
   const GY = 44;
   const { rows, edges } = layout(nodes);
@@ -73,7 +73,7 @@ export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
       <svg className="flow-edges" width={width} height={height} aria-hidden="true">
         <defs>
           <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0L10 5L0 10z" fill="#7d8b97" />
+            <path d="M0 0L10 5L0 10z" fill="#8794a0" />
           </marker>
         </defs>
         {edges.map((e, i) => {
@@ -91,7 +91,7 @@ export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
           const passed = done?.has(e.from) && (done?.has(e.to) || e.to === selected);
           return (
             <g key={i}>
-              <path d={d} fill="none" stroke={passed ? '#ffb326' : '#55636e'} strokeWidth={passed ? 2.5 : 1.6} markerEnd="url(#flow-arrow)" />
+              <path d={d} fill="none" stroke={passed ? '#e08e00' : '#9aa7b3'} strokeWidth={passed ? 2.5 : 1.6} markerEnd="url(#flow-arrow)" />
               {e.label && (
                 <text x={(x1 + x2) / 2 + (back ? W / 2 + 40 : 0)} y={(y1 + y2) / 2 + 4} className="flow-label" textAnchor="middle">
                   {e.label}
@@ -103,13 +103,11 @@ export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
       </svg>
       {[...pos.entries()].map(([id, p]) => {
         const n = byId.get(id)!;
-        const summary = n.kind === 'action' || n.kind === 'decision' ? n.summary || (n.kind === 'decision' ? n.question : n.description) : '';
         const cls = `flow-node kind-${n.kind}${selected === id ? ' is-selected' : ''}${done?.has(id) ? ' is-done' : ''}`;
         const body = (
           <>
             <span className="flow-kind">{KIND[n.kind]}</span>
-            <strong>{nodeTitle(n)}</strong>
-            {summary && <span className="flow-sum">{summary}</span>}
+            <strong title={nodeTitle(n)}>{nodeTitle(n)}</strong>
           </>
         );
         return onSelect ? (
