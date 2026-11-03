@@ -59,14 +59,33 @@ export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
   const GX = 28;
   const GY = 44;
   const { rows, edges } = layout(nodes);
-  const width = Math.max(...rows.map((r) => r.length * W + (r.length - 1) * GX), W) + 48;
+  const baseWidth = Math.max(...rows.map((r) => r.length * W + (r.length - 1) * GX), W) + 48;
   const height = rows.length * H + (rows.length - 1) * GY + 24;
-  const pos = new Map<string, { x: number; y: number }>();
+  const pos = new Map<string, { x: number; y: number; row: number }>();
   rows.forEach((r, ri) => {
     const rowW = r.length * W + (r.length - 1) * GX;
-    r.forEach((id, i) => pos.set(id, { x: (width - rowW) / 2 + i * (W + GX), y: 12 + ri * (H + GY) }));
+    r.forEach((id, i) => pos.set(id, { x: (baseWidth - rowW) / 2 + i * (W + GX), y: 12 + ri * (H + GY), row: ri }));
   });
   const byId = new Map(nodes.map((n) => [n.id, n]));
+
+  // arrows that go back up run in their own lane to the right of the steps they pass
+  const LANE = 22;
+  const backs = edges.filter((e) => {
+    const p = pos.get(e.from);
+    const q = pos.get(e.to);
+    return p && q && q.row <= p.row;
+  });
+  const rightOf = (r0: number, r1: number) =>
+    Math.max(...[...pos.values()].filter((p) => p.row >= Math.min(r0, r1) && p.row <= Math.max(r0, r1)).map((p) => p.x + W));
+  const laneX = new Map(
+    backs.map((e, i) => {
+      const p = pos.get(e.from)!;
+      const q = pos.get(e.to)!;
+      return [e, rightOf(p.row, q.row) + LANE * (i + 1)] as const;
+    }),
+  );
+  const labelRoom = backs.some((e) => e.label) ? 60 : 12;
+  const width = Math.max(baseWidth, ...[...laneX.values()].map((x) => x + labelRoom));
 
   return (
     <div className="flow" style={{ width, height }}>
@@ -77,23 +96,34 @@ export function Flowchart({ nodes, selected, done, onSelect, compact }: Props) {
           </marker>
         </defs>
         {edges.map((e, i) => {
-          const a = pos.get(e.from);
-          const b = pos.get(e.to);
-          if (!a || !b) return null;
-          const x1 = a.x + W / 2;
-          const y1 = a.y + H;
-          const x2 = b.x + W / 2;
-          const y2 = b.y;
-          const back = y2 <= y1;
-          const d = back
-            ? `M${a.x + W} ${a.y + H / 2} C${a.x + W + 60} ${a.y + H / 2}, ${b.x + W + 60} ${b.y + H / 2}, ${b.x + W} ${b.y + H / 2}`
-            : `M${x1} ${y1} C${x1} ${y1 + GY / 1.4}, ${x2} ${y2 - GY / 1.4}, ${x2} ${y2}`;
+          const p = pos.get(e.from);
+          const q = pos.get(e.to);
+          if (!p || !q) return null;
+          const lx = laneX.get(e);
+          let d: string;
+          let label: { x: number; y: number; anchor: 'middle' | 'start' };
+          if (lx !== undefined) {
+            // out of the right side, up the lane, back into the right side of the earlier step
+            const y1 = p.y + H / 2;
+            const y2 = q.y + H / 2;
+            const r = Math.min(10, Math.abs(y1 - y2) / 2 || 10);
+            d = `M${p.x + W} ${y1} H${lx - r} Q${lx} ${y1} ${lx} ${y1 - r} V${y2 + r} Q${lx} ${y2} ${lx - r} ${y2} H${q.x + W + 2}`;
+            // the answer sits where the arrow leaves its step, so labels of different lanes never meet
+            label = { x: p.x + W + 6, y: y1 - 6, anchor: 'start' };
+          } else {
+            const x1 = p.x + W / 2;
+            const y1 = p.y + H;
+            const x2 = q.x + W / 2;
+            const y2 = q.y;
+            d = `M${x1} ${y1} C${x1} ${y1 + GY / 1.4}, ${x2} ${y2 - GY / 1.4}, ${x2} ${y2}`;
+            label = { x: (x1 + x2) / 2, y: (y1 + y2) / 2 + 4, anchor: 'middle' };
+          }
           const passed = done?.has(e.from) && (done?.has(e.to) || e.to === selected);
           return (
             <g key={i}>
               <path d={d} fill="none" stroke={passed ? '#e08e00' : '#9aa7b3'} strokeWidth={passed ? 2.5 : 1.6} markerEnd="url(#flow-arrow)" />
               {e.label && (
-                <text x={(x1 + x2) / 2 + (back ? W / 2 + 40 : 0)} y={(y1 + y2) / 2 + 4} className="flow-label" textAnchor="middle">
+                <text x={label.x} y={label.y} className="flow-label" textAnchor={label.anchor}>
                   {e.label}
                 </text>
               )}
