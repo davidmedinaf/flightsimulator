@@ -4,6 +4,8 @@ A tablet-friendly web app for practising flight deck procedures for a 737 MAX fl
 
 > Simulator training aid only. Not a certified aviation procedure system. Follow approved training materials and instructor guidance.
 
+Users sign in with an email address. Creators build exercises on the panels; everyone can play the exercises shared with them, rate them and comment.
+
 The app is not connected to a simulator. Its panel is a practice panel with simplified behaviour; it cannot see the state of any real switch or indication.
 
 ## What the POC covers
@@ -29,6 +31,25 @@ It can be worked through in two ways, and both panels can also be operated freel
 
 Light behaviour is a simplification for an airplane on the ground with electrical power and both engines shut down. Each rule and its source are written in `src/data/panels/fwd-overhead.schematic.ts` and shown under the **i** button of the steps that rely on it.
 
+## Accounts, roles and exercises
+
+Accounts and data are kept in Firebase (project in `.firebaserc`; web configuration in `src/firebase/config.ts`, which is not secret). What each role may do is enforced by `firestore.rules`:
+
+| Role | Can |
+|---|---|
+| Admin | Everything: all exercises, users (role, votes, reviews, disable, delete), notifications |
+| Creator | Create exercises, edit and publish their own, choose private or public, share private ones |
+| User | Play public exercises and those shared with them; one vote (1–5) and one comment each |
+
+New accounts are users. `damefr@hotmail.com` starts as admin and `damefr+creator@hotmail.com` as creator (listed in both `firestore.rules` and `src/auth.tsx`).
+
+- **Versions.** An exercise has at most a draft and a published version. Only drafts can be edited; editing a published exercise first creates draft v(N+1). Publishing needs a release note, overwrites the published version and deletes the draft.
+- **Exercises** have a name, description, panels, an initial panel state and steps between Start and End: actions (ordered sub-steps recorded on the panel, optional description and expected result) and decisions (fixed answers or number ranges, each leading to its own next step).
+- **Comments** are checked for bad language in English and Spanish; blocked ones notify the admins in the app.
+- **Deleting a user** removes their profile and all access; the sign-in account itself is removed in the Firebase console (Authentication).
+
+To change the rules, paste `firestore.rules` into Firestore → Rules in the Firebase console and publish. `npm run seed` creates the test accounts and the example exercise; their passwords are written to `C:\AI\PROJECTS\_secrets\flightsim-test-users.env`, outside the repository.
+
 ## Run it locally
 
 Requires Node.js 22.18 or later.
@@ -47,6 +68,8 @@ Other commands:
 | `npm run build` | Type-checks and builds the static site into `dist/` |
 | `npm run preview` | Serves the built site |
 | `npm run check:data` | Validates the data and dry-runs the procedure on the practice panel |
+| `npm run check:exercises` | Example exercise, publishing checks, release notes, bad-language filter |
+| `npm run check:rules` | Signs in with the test accounts and checks what each role may and may not do |
 | `npm run check:panels` | Exercises panel behaviour: IRS keyboard, SATCOM call, guarded switches, light previews |
 
 A link can open the app at a given place: `#guided/<step id>`, `#practice/<section id>` or `#explore/<panel id>`.

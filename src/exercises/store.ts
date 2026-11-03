@@ -38,6 +38,9 @@ export async function deleteProfile(uid: string): Promise<void> {
 
 // ---------- exercises ----------
 
+/** The published version, or null; reading one that does not exist is refused by the rules. */
+const publishedSnap = (id: string) => getDoc(doc(db, 'exercises', id)).catch(() => null);
+
 const merge = <T extends { id: string }>(lists: T[][]) => [...new Map(lists.flat().map((x) => [x.id, x])).values()];
 
 export async function listExercises(me: Profile): Promise<{ published: Published[]; drafts: Draft[] }> {
@@ -72,8 +75,8 @@ export async function saveDraft(d: Draft): Promise<void> {
   const { id, ...data } = d;
   await setDoc(doc(db, 'drafts', id), clean({ ...data, updatedAt: Date.now() }));
   // the published version, if any, notes that a draft exists
-  const pub = await getDoc(doc(db, 'exercises', id));
-  if (pub.exists() && !pub.data().hasDraft) await updateDoc(doc(db, 'exercises', id), { hasDraft: true });
+  const pub = await publishedSnap(id);
+  if (pub?.exists() && !pub.data().hasDraft) await updateDoc(doc(db, 'exercises', id), { hasDraft: true });
 }
 
 /** Starts a draft from the published version (version N becomes the base of draft N + 1). */
@@ -121,8 +124,8 @@ export async function publishDraft(d: Draft, existing: Published | null): Promis
 
 export async function discardDraft(id: string): Promise<void> {
   await deleteDoc(doc(db, 'drafts', id));
-  const pub = await getDoc(doc(db, 'exercises', id));
-  if (pub.exists()) await updateDoc(doc(db, 'exercises', id), { hasDraft: false });
+  const pub = await publishedSnap(id);
+  if (pub?.exists()) await updateDoc(doc(db, 'exercises', id), { hasDraft: false });
 }
 
 export async function setSharing(id: string, visibility: Published['visibility'], sharedWith: string[]): Promise<void> {

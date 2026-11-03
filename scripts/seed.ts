@@ -49,7 +49,9 @@ for (const u of USERS) {
   if (u.role === 'creator') {
     const ex = seedExercise();
     const exRef = doc(db, 'exercises', ex.id);
-    if ((await getDoc(exRef)).exists()) console.log('example exercise already published');
+    // reading a missing exercise is refused by the rules, which means it is not there yet
+    const exists = await getDoc(exRef).then((d) => d.exists(), () => false);
+    if (exists) console.log('example exercise already published');
     else {
       const now = Date.now();
       await setDoc(exRef, {
