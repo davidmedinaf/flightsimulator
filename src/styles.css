@@ -358,20 +358,10 @@ p {
 }
 
 .schematic text {
-  font-family: 'Arial Narrow', 'Roboto Condensed', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 700;
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
   letter-spacing: 0.02em;
-  text-anchor: middle;
-  dominant-baseline: central;
+  text-rendering: geometricPrecision;
   pointer-events: none;
-}
-
-.schematic text[text-anchor='start'] {
-  text-anchor: start;
-}
-
-.schematic text[text-anchor='end'] {
-  text-anchor: end;
 }
 
 .schematic .knob-rotor {
@@ -1159,5 +1149,105 @@ button.contents-group:hover {
 
   .highlight span {
     animation: none !important;
+  }
+}
+
+/* ---------- panels: free play ---------- */
+
+.explore {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.explore .topbar {
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.tab {
+  font: inherit;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  padding: 8px 14px;
+  min-height: 40px;
+  cursor: pointer;
+}
+
+.tab.is-active {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.explore-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #0b0d0f;
+  -webkit-overflow-scrolling: touch;
+}
+
+.explore-panel {
+  margin: 0 auto;
+}
+
+.explore-panel .schematic {
+  height: auto;
+}
+
+.explore-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-top: 1px solid var(--line);
+}
+
+.explore-bar .zoom {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.schematic .hit-light:hover {
+  fill: rgba(255, 210, 63, 0.12);
+}
+
+.btn[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.is-shaking .schematic {
+  animation: shake 0.07s linear infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(1.5px, -1px); }
+  50% { transform: translate(-1px, 1.5px); }
+  75% { transform: translate(1px, 1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-shaking .schematic {
+    animation: none;
   }
 }

@@ -132,16 +132,25 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     }
   };
 
-  const guard = (id: string, label: string, color: 'black' | 'red') => {
+  /**
+   * Guarded switch. `open` lists the switch positions, the guarded (normal) one first.
+   * Positions: "closed" (guard down, switch in its normal position), then each open position.
+   */
+  type GuardPos = [string, Dir];
+  const guardPositions = (open: GuardPos[]): SwitchPosition[] => [
+    { id: 'closed', label: `${open[0][0]}, guard closed`, dir: open[0][1] },
+    ...open.map(([id, dir], i) => ({ id, label: i === 0 ? `${id}, guard open` : id, dir })),
+  ];
+  const guard = (id: string, label: string, color: 'black' | 'red', open: GuardPos[]) => {
     const b = box(id);
     switches.push({
       id,
       label,
-      style: 'guard',
+      style: 'guarded',
       x: b.cx,
       y: b.cy,
       r: Math.min(b.w, b.h) / 2,
-      positions: [{ id: 'closed' }, { id: 'open' }],
+      positions: guardPositions(open),
       initial: 'closed',
       guard: { w: b.w, h: b.h, color },
     });
@@ -171,6 +180,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
   const dText = (x: number, y: number, str: string, o: TextOpts = {}) => text(x * F, y * F, str, o);
   const dLight = (x: number, y: number, w: number, h: number, rows: string[], o: LightOpts = {}) =>
     addLight(`decor.light${decor++}`, [x * F, y * F, w * F, h * F], rows, o);
+  // Controls the procedure does not use still move, so the whole panel can be operated; they change nothing else.
   const dToggle = (x: number, y: number, dir: Dir = 'up', tone: SwitchEl['tone'] = 'light') =>
     switches.push({
       id: `decor.switch${decor++}`,
@@ -179,21 +189,41 @@ export function buildFwdOverhead(controls: Rects): Schematic {
       x: x * F,
       y: y * F,
       r: TOGGLE_R,
-      positions: [{ id: 'fixed', dir }],
+      positions:
+        dir === 'center'
+          ? [{ id: 'UP', dir: 'up' }, { id: 'CENTER', dir: 'center' }, { id: 'DOWN', dir: 'down' }]
+          : [{ id: 'UP', dir: 'up' }, { id: 'DOWN', dir: 'down' }],
+      initial: dir === 'center' ? 'CENTER' : dir === 'up' ? 'UP' : 'DOWN',
       tone,
     });
   const dButton = (x: number, y: number, r = 20, tone: SwitchEl['tone'] = 'dark') =>
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'button', x: x * F, y: y * F, r, tone });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'push', momentary: true, x: x * F, y: y * F, r, tone });
   const dKnob = (x: number, y: number, r: number, pointer: number) =>
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'knob', x: x * F, y: y * F, r, pointer });
-  const dGuard = (x: number, y: number, w: number, h: number, color: 'black' | 'red') =>
     switches.push({
       id: `decor.switch${decor++}`,
       label: '',
-      style: 'guard',
+      style: 'knob',
+      tone: 'light',
+      x: x * F,
+      y: y * F,
+      r,
+      positions: [
+        { id: 'LEFT', angle: pointer - 45 },
+        { id: 'CENTER', angle: pointer },
+        { id: 'RIGHT', angle: pointer + 45 },
+      ],
+      initial: 'CENTER',
+    });
+  const dGuard = (x: number, y: number, w: number, h: number, color: 'black' | 'red', label: string, open: GuardPos[]) =>
+    switches.push({
+      id: `decor.switch${decor++}`,
+      label,
+      style: 'guarded',
       x: (x + w / 2) * F,
       y: (y + h / 2) * F,
-      r: 0,
+      r: Math.min(w, h) * F * 0.5,
+      positions: guardPositions(open),
+      initial: 'closed',
       guard: { w: w * F, h: h * F, color },
     });
   const dGauge = (x: number, y: number, r: number, label: string[], needle: number) =>
@@ -244,8 +274,8 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text((a.cx + b.cx) / 2, a.y - 44, 'FLT CONTROL', { size: 24 });
     text(a.cx, a.y - 16, 'A', { size: 18 });
     text(b.cx, b.y - 16, 'B', { size: 18 });
-    guard('fltCtl.A', 'FLT CONTROL A switch', 'black');
-    guard('fltCtl.B', 'FLT CONTROL B switch', 'black');
+    guard('fltCtl.A', 'FLT CONTROL A switch', 'black', [['A ON', 'down'], ['OFF', 'center'], ['STBY RUD', 'up']]);
+    guard('fltCtl.B', 'FLT CONTROL B switch', 'black', [['B ON', 'down'], ['OFF', 'center'], ['STBY RUD', 'up']]);
     text(a.x - 10, a.y + 34, 'STBY\nRUD', { size: 15, anchor: 'end' });
     text(a.x - 10, a.y + 100, 'OFF', { size: 15, anchor: 'end' });
     text(a.x - 10, a.y + 150, 'A ON', { size: 15, anchor: 'end' });
@@ -270,8 +300,8 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text((sa.cx + sb.cx) / 2, sa.y - 42, 'SPOILER', { size: 22 });
     text(sa.cx, sa.y - 15, 'A', { size: 18 });
     text(sb.cx, sb.y - 15, 'B', { size: 18 });
-    guard('spoiler.A', 'SPOILER A switch', 'black');
-    guard('spoiler.B', 'SPOILER B switch', 'black');
+    guard('spoiler.A', 'SPOILER A switch', 'black', [['ON', 'down'], ['OFF', 'up']]);
+    guard('spoiler.B', 'SPOILER B switch', 'black', [['ON', 'down'], ['OFF', 'up']]);
     text(sa.x - 10, sa.y + 50, 'OFF', { size: 15, anchor: 'end' });
     text(sa.x - 10, sa.y + 130, 'ON', { size: 15, anchor: 'end' });
     text(sb.x2 + 10, sb.y + 50, 'OFF', { size: 15, anchor: 'start' });
@@ -293,7 +323,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
 
     const m = box('altFlaps.master');
     const p = box('altFlaps.position');
-    guard('altFlaps.master', 'ALTERNATE FLAPS master switch', 'red');
+    guard('altFlaps.master', 'ALTERNATE FLAPS master switch', 'red', [['OFF', 'up'], ['ARM', 'down']]);
     text(m.cx, m.y2 + 14, 'ARM', { size: 14 });
     text(p.cx + 4, m.y + 12, 'ALTERNATE\nFLAPS', { size: 17 });
     toggle('altFlaps.position', 'ALTERNATE FLAPS position switch', [pos('UP', 'up'), pos('OFF', 'center'), pos('DOWN', 'down')], {
@@ -465,7 +495,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     dText(565, 540, 'DC', { size: 16, tone: 'dim' });
     dKnob(775, 598, 40, 180);
     dText(775, 540, 'AC', { size: 16, tone: 'dim' });
-    dGuard(540, 652, 50, 100, 'black');
+    dGuard(540, 652, 50, 100, 'black', 'BAT switch', [['ON', 'down'], ['OFF', 'up']]);
     dText(565, 770, 'BAT', { size: 16 });
 
     const cu = box('elec.cabUtil');
@@ -486,10 +516,10 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text(sp.cx, sp.y - 20, 'STANDBY POWER', { size: 19 });
     text(d1.cx, d1.y - 14, 'DISCONNECT', { size: 15 });
     text(d2.cx, d2.y - 14, 'DISCONNECT', { size: 15 });
-    guard('elec.standbyPower', 'STANDBY POWER switch', 'black');
+    guard('elec.standbyPower', 'STANDBY POWER switch', 'black', [['AUTO', 'right'], ['OFF', 'center'], ['BAT', 'left']]);
     text(sp.cx, sp.y2 + 20, 'BAT    OFF    AUTO', { size: 15 });
-    guard('elec.disconnect1', 'Generator drive DISCONNECT switch 1', 'red');
-    guard('elec.disconnect2', 'Generator drive DISCONNECT switch 2', 'red');
+    guard('elec.disconnect1', 'Generator drive DISCONNECT switch 1', 'red', [['NORMAL', 'up'], ['DISCONNECT', 'down']]);
+    guard('elec.disconnect2', 'Generator drive DISCONNECT switch 2', 'red', [['NORMAL', 'up'], ['DISCONNECT', 'down']]);
 
     const bt = box('elec.busTransfer');
     dLight(648, 1092, 66, 38, ['GRD POWER', 'AVAILABLE'], { color: 'blue' });
@@ -498,7 +528,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text(bt.cx, bt.y - 14, 'BUS TRANSFER', { size: 17, tone: 'dark' });
     text(bt.x - 12, bt.cy, 'OFF', { size: 15, tone: 'dark', anchor: 'end' });
     text(bt.x2 + 12, bt.cy, 'AUTO', { size: 15, tone: 'dark', anchor: 'start' });
-    guard('elec.busTransfer', 'BUS TRANSFER switch', 'black');
+    guard('elec.busTransfer', 'BUS TRANSFER switch', 'black', [['AUTO', 'right'], ['OFF', 'left']]);
     for (const x of [512, 782]) {
       dLight(x, 1284, 72, 36, ['TRANSFER', 'BUS OFF']);
       dLight(x, 1322, 72, 36, ['SOURCE', 'OFF']);
@@ -549,7 +579,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
 
     dText(981, 978, 'EMER EXIT LIGHTS', { size: 17 });
     dLight(900, 1062, 42, 80, ['NOT', 'ARMED']);
-    dGuard(966, 1000, 56, 150, 'black');
+    dGuard(966, 1000, 56, 150, 'black', 'EMER EXIT LIGHTS switch', [['ARMED', 'center'], ['ON', 'down'], ['OFF', 'up']]);
     dText(1030, 1044, 'OFF', { size: 14, anchor: 'start' });
     dText(1030, 1078, 'ARMED', { size: 14, anchor: 'start' });
     dText(1030, 1110, 'ON', { size: 14, anchor: 'start' });
@@ -562,7 +592,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text((ns + fb.cx) / 2, fb.cy - 26, 'OFF', { size: 14 });
     text((ns + fb.cx) / 2, fb.cy + 2, 'AUTO', { size: 14 });
     text((ns + fb.cx) / 2, fb.cy + 30, 'ON', { size: 14 });
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: ns, y: fb.cy, r: TOGGLE_R, positions: [{ id: 'fixed', dir: 'up' }] });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: ns, y: fb.cy, r: TOGGLE_R, positions: [{ id: 'UP', dir: 'up' }, { id: 'DOWN', dir: 'down' }], initial: 'UP' });
     toggle('signs.fastenBelts', 'FASTEN BELTS switch', belts, { labels: 'none' });
 
     dText(925, 1318, 'ATTEND', { size: 16 });
@@ -622,7 +652,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
       const side = id.startsWith('side') ? 'SIDE' : 'FWD';
       toggle(`windowHeat.${id}`, `WINDOW HEAT ${id.endsWith('L') ? 'L' : 'R'} ${side} switch`, OFF_ON, { labels: 'none' });
     }
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: mid, y: sl.cy, r: 26, positions: [{ id: 'fixed', dir: 'center' }] });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: mid, y: sl.cy, r: 26, positions: [{ id: 'UP', dir: 'up' }, { id: 'CENTER', dir: 'center' }, { id: 'DOWN', dir: 'down' }], initial: 'CENTER' });
     text(mid, sl.cy - 36, 'TEST', { size: 11 });
 
     const pa = box('probeHeat.A');
@@ -847,7 +877,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
     text(wl.x - 34, wl.cy, 'WING\nANTI\nICE', { size: 12, tone: 'dark' });
     text(wr.x2 + 34, wr.cy, 'WING\nANTI\nICE', { size: 12, tone: 'dark' });
     text((wl.x2 + wr.x) / 2, wl.y2 - 8, 'TRIP', { size: 12, tone: 'dark' });
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'button', x: (wl.x2 + wr.x) / 2, y: wl.y2 + 20, r: 16, tone: 'dark' });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'push', momentary: true, x: (wl.x2 + wr.x) / 2, y: wl.y2 + 20, r: 16, tone: 'dark' });
     text((wl.x2 + wr.x) / 2, wl.y2 + 48, 'RESET', { size: 12, tone: 'dark' });
 
     const b1 = box('air.bleed1');
@@ -903,7 +933,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
       knob(id, label, null, { at: { x: b.cx, y: b.y2 - 40 }, r: 32, pointer: 0 });
     }
     gauges.push({ x: ms.cx + 12, y: fa.cy + 8, r: 50, label: ['VALVE'], needle: -60 });
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: ms.cx + 12, y: la.y - 4, r: 24, positions: [{ id: 'fixed', dir: 'center' }], tone: 'dark' });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: ms.cx + 12, y: la.y - 4, r: 24, positions: [{ id: 'UP', dir: 'up' }, { id: 'CENTER', dir: 'center' }, { id: 'DOWN', dir: 'down' }], initial: 'CENTER', tone: 'dark' });
     text(ms.cx - 26, la.y - 4, 'CLOSE', { size: 11, anchor: 'end' });
     text(ms.cx + 50, la.y - 4, 'OPEN', { size: 11, anchor: 'start' });
     text(ms.cx, ms.cy - 80, 'ALTN', { size: 14 });
@@ -944,7 +974,7 @@ export function buildFwdOverhead(controls: Rects): Schematic {
 
     const apuX = tx.cx + 80;
     text(apuX, tx.cy - 64, 'APU', { size: 15 });
-    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: apuX, y: tx.cy, r: TOGGLE_R, positions: [{ id: 'fixed', dir: 'up' }] });
+    switches.push({ id: `decor.switch${decor++}`, label: '', style: 'toggle', x: apuX, y: tx.cy, r: TOGGLE_R, positions: [{ id: 'UP', dir: 'up' }, { id: 'DOWN', dir: 'down' }], initial: 'UP' });
     text(apuX + 24, tx.cy - 36, 'OFF', { size: 12, anchor: 'start' });
     text(apuX + 30, tx.cy + 6, 'ON', { size: 12, anchor: 'start' });
     text(apuX, tx.cy + 47, 'START', { size: 13 });
@@ -989,5 +1019,15 @@ export function buildFwdOverhead(controls: Rects): Schematic {
   }
 
 
-  return { width: W, height: H, plates, lines, texts, gauges, lights, switches };
+  // Name the controls the procedure does not use after the nearest heading above them.
+  for (const sw of switches) {
+    if (sw.label) continue;
+    const heading = texts
+      .filter((t) => t.size >= 14 && t.y < sw.y + 10 && Math.abs(t.x - sw.x) < 170 && sw.y - t.y < 190 && /[A-Z]{2}/.test(t.text))
+      .sort((a, b) => Math.hypot(a.x - sw.x, a.y - sw.y) - Math.hypot(b.x - sw.x, b.y - sw.y))[0];
+    sw.label = heading ? `${heading.text.replace(/\n/g, ' ').replace(/\s+/g, ' ')} control` : 'Panel control';
+    sw.desc = [['Not simulated', 'This control moves but has no effect on the rest of the panel in this simulation.']];
+  }
+
+  return { width: W, height: H, centredText: true, plates, lines, texts, gauges, lights, switches };
 }

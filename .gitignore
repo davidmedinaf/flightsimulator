@@ -18,3 +18,7 @@ dist/
 
 # AI-generated look-and-feel references, kept locally.
 /PANEL *.jpeg
+
+# reference images and prototypes kept out of the repository
+/AFT OVERHEAD PANEL.*
+/prototypes/

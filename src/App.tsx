@@ -1,18 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Contents, type ContentsGroup } from './components/Contents';
+import { Explorer } from './components/Explorer';
 import { GuidedPane } from './components/GuidedPane';
 import { PanelView, type Highlight, type Tone, type ViewMode } from './components/PanelView';
 import { itemStatus, PracticePane } from './components/PracticePane';
 import { Review } from './components/Review';
-import { elementLabel, groupOf, isMapped, panels, procedures, stepControls } from './data';
+import { groupOf, isMapped, panels, procedures, stepControls } from './data';
 import { advance, currentStep, goBack, jumpTo, loadRun, nextStepId, saveRun, startRun, type RunState } from './engine';
 import { buildPractice, freshPractice, loadPractice, savePractice, type PracticeState } from './practice';
-import { initialSim, lightLevels, loadSim, operate, saveSim, stateWord, type SimState } from './sim';
+import { initialSim, loadSim, saveSim, type SimState } from './sim';
+import { usePanel } from './usePanel';
 
 const DISCLAIMER =
   'Simulator training aid only. Not a certified aviation procedure system. Follow approved training materials and instructor guidance.';
 
-type Screen = 'home' | 'guided' | 'practice' | 'review';
+type Screen = 'home' | 'guided' | 'practice' | 'review' | 'explore';
 
 /**
  * Optional deep link, read once at start: #guided/<step id> or
@@ -23,7 +25,7 @@ function readLink() {
   const [screen, target, ...rest] = decodeURIComponent(location.hash.slice(1)).split('/');
   const set = rest.find((p) => p.includes('='));
   return {
-    screen: (['guided', 'practice', 'review'].includes(screen) ? screen : 'home') as Screen,
+    screen: (['guided', 'practice', 'review', 'explore'].includes(screen) ? screen : 'home') as Screen,
     target,
     full: rest.includes('full'),
     contents: rest.includes('contents'),
@@ -56,21 +58,15 @@ export default function App() {
   const [confirmRestart, setConfirmRestart] = useState(false);
   // The practice line the student picked, and whether it was still open at that moment.
   const [selected, setSelected] = useState<{ id: string; wasTodo: boolean } | null>(null);
-  const [lastOp, setLastOp] = useState<string | null>(null);
 
   useEffect(() => saveRun(run), [run]);
   useEffect(() => savePractice(practice), [practice]);
   useEffect(() => saveSim(sim), [sim]);
 
-  const levels = useMemo(() => lightLevels(panel.schematic, sim), [panel, sim]);
+  const p = usePanel(panel, sim, setSim);
+  const levels = p.levels;
   const total = procedure.steps.length;
   const mappedCount = procedure.steps.filter((s) => isMapped(procedure, s)).length;
-
-  function onOperate(id: string) {
-    const next = operate(panel.schematic, sim, id);
-    setSim(next);
-    setLastOp(`${elementLabel(panel, id)}: ${stateWord(next.pos[id])}`);
-  }
 
   // Functional updates, so quick repeated taps each act on the latest state.
   const forward = (choiceNext?: string) => setRun((r) => (r ? advance(procedure, r, choiceNext) : r));
@@ -90,7 +86,7 @@ export default function App() {
     setPractice(freshPractice);
     setSim(initialSim(panel.schematic));
     setSelected(null);
-    setLastOp(null);
+    p.setLastOp(null);
     setConfirmRestart(false);
   }
 
@@ -109,6 +105,10 @@ export default function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [screen, run, procedure, contents]);
+
+  if (screen === 'explore') {
+    return <Explorer initialPanel={link.target} onClose={() => setScreen('home')} disclaimer={DISCLAIMER} />;
+  }
 
   if (screen === 'review') {
     return <Review procedure={procedure} onClose={() => setScreen('home')} />;
@@ -158,6 +158,9 @@ export default function App() {
                 Reset panel and progress
               </button>
             )}
+            <button className="btn" onClick={() => setScreen('explore')}>
+              Panels: free play
+            </button>
             <button className="btn btn-quiet" onClick={() => setScreen('review')}>
               Mapping review
             </button>
@@ -238,7 +241,7 @@ export default function App() {
   const remaining = todo.reduce((a, b) => a + b, 0);
 
   return (
-    <div className="run">
+    <div className={`run${p.effect?.shake ? ' is-shaking' : ''}`}>
       <header className="topbar">
         <div className="topbar-title">
           <strong>{procedure.title}</strong>
@@ -319,7 +322,10 @@ export default function App() {
               mode={mode}
               sim={sim}
               levels={levels}
-              onOperate={onOperate}
+              onOperate={p.onOperate}
+              onPress={p.onPress}
+              onRelease={p.onRelease}
+              onLight={p.onLight}
               dimmed={textOnly}
             />
             <div className="panel-chrome">
@@ -328,7 +334,7 @@ export default function App() {
                   ? step?.textOnly === 'info'
                     ? 'Nothing to highlight for this step'
                     : 'Not on this panel'
-                  : (lastOp ?? 'Tap a switch to move it')}
+                  : (p.effect?.message ?? p.lastOp ?? 'Tap a switch to move it')}
               </span>
               {!textOnly && (
                 <button className="btn btn-overlay" onClick={() => setMode(mode === 'focus' ? 'full' : 'focus')}>

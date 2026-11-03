@@ -22,6 +22,9 @@ interface Props {
   sim: SimState;
   levels: Record<string, LightLevel>;
   onOperate?: (id: string) => void;
+  onPress?: (id: string) => void;
+  onRelease?: (id: string) => void;
+  onLight?: (id: string) => void;
   /** Greys the panel out; used for steps that have nothing to highlight on it. */
   dimmed?: boolean;
 }
@@ -40,7 +43,7 @@ function clamp(v: number, lo: number, hi: number) {
  * layer. Both share one box, so highlights stay aligned at any size or zoom.
  * Zooming resizes that box rather than scaling it, which keeps the drawing sharp.
  */
-export function PanelView({ panel, highlights, frame, mode, sim, levels, onOperate, dimmed }: Props) {
+export function PanelView({ panel, highlights, frame, mode, sim, levels, onOperate, onPress, onRelease, onLight, dimmed }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
 
@@ -94,7 +97,15 @@ export function PanelView({ panel, highlights, frame, mode, sim, levels, onOpera
     <div className="panel-view" ref={ref}>
       {baseW > 0 && (
         <div className={`panel-layer${dimmed ? ' is-dimmed' : ''}`} style={layerStyle}>
-          <Schematic schematic={panel.schematic} sim={sim} levels={levels} onOperate={onOperate} />
+          <Schematic
+            schematic={panel.schematic}
+            sim={sim}
+            levels={levels}
+            onOperate={onOperate}
+            onPress={onPress}
+            onRelease={onRelease}
+            onLight={onLight}
+          />
           {highlights.map((h, i) => (
             <div
               key={`${h.control.label}-${i}`}

@@ -1,6 +1,6 @@
 # Procedure Trainer (proof of concept)
 
-A tablet-friendly web app for practising a flight deck procedure for a 737 MAX flight simulator. It shows a schematic of the forward overhead panel that can be operated: switches move when tapped and the lights respond.
+A tablet-friendly web app for practising flight deck procedures for a 737 MAX flight simulator. It draws the forward and aft overhead panels so they can be operated: switches move when tapped and the lights respond.
 
 > Simulator training aid only. Not a certified aviation procedure system. Follow approved training materials and instructor guidance.
 
@@ -10,7 +10,7 @@ The app is not connected to a simulator. Its panel is a practice panel with simp
 
 One procedure: the forward overhead panel part of *Preflight Procedure – PF*, from "Flight control panel … Check" to "ENGINE START switches … OFF" (FCOM NP.21.22 – NP.21.26, PDF pages 160 – 164).
 
-It can be worked through in two ways:
+It can be worked through in two ways, and both panels can also be operated freely under **Panels: free play**:
 
 - **Step by step.** The 91 steps of the manual one at a time, in its order and wording. The steps of the current sub-panel are listed on the right, and any step can be opened directly, from that list or from **All steps**.
 - **Practice.** The same procedure as 12 sub-panels. Each shows the actions to perform and the checks to make, grouped; lights that must show the same state are one line. Only the controls of one line are highlighted at a time: the line tapped on the right, or else the next open one.
@@ -19,9 +19,11 @@ It can be worked through in two ways:
 
 ### The practice panel
 
-- 66 switches and selectors can be operated. A tap moves a switch to its next position.
-- Guarded switches: only the guard opens and closes.
-- Lights have three states: extinguished, illuminated dim and illuminated.
+- Every switch, selector, button and key on both panels can be operated. A tap moves a switch to its next position; push buttons and keys act while held.
+- Guarded switches: the first tap opens the guard, the next ones move the switch under it; the guard closes again from the switch's normal position.
+- Lights have three states: extinguished, illuminated dim and illuminated. Tapping a light previews its other states; a further tap returns it to what the panel shows.
+- On the aft panel the IRS keyboard keys entries into the IRS display (accepted while the ALIGN light is illuminated), the transmitter selectors latch, receivers turn on and off with three volume steps, and the MACH AIRSPEED and STALL WARNING tests play a sound while held.
+- Controls the procedure does not use move, but change nothing else.
 - 64 steps are verified against the panel. An action counts as done when the panel shows it; a check can only be ticked when the panel really shows what it asks for.
 - The panel starts as the reference photo shows it, with the yaw damper, fuel pumps, window heat, electric hydraulic pumps, packs and similar still to be set.
 
@@ -45,8 +47,9 @@ Other commands:
 | `npm run build` | Type-checks and builds the static site into `dist/` |
 | `npm run preview` | Serves the built site |
 | `npm run check:data` | Validates the data and dry-runs the procedure on the practice panel |
+| `npm run check:panels` | Exercises panel behaviour: IRS keyboard, SATCOM call, guarded switches, light previews |
 
-A link can open the app at a given place: `#guided/<step id>` or `#practice/<section id>`.
+A link can open the app at a given place: `#guided/<step id>`, `#practice/<section id>` or `#explore/<panel id>`.
 
 ## Publish it
 
@@ -71,13 +74,15 @@ The site is then served at `https://<user>.github.io/<repository>/`. Every later
 ```
 public/panels/                        reference photo of the panel
 src/data/panels/*.controls.json       where each control is, measured on the photo
-src/data/panels/*.schematic.ts        the schematic drawing, switch positions and light rules
+src/data/panels/*.schematic.ts        the panel drawings, switch positions and light rules (forward and aft)
+src/data/panels/irs-keyboard.ts       IRS keyboard entry logic
 src/data/procedures/*.json            the steps of each procedure and its practice sections
 src/data/index.ts                     registry of panels and procedures
 src/engine.ts                         step navigation (next, previous, jump, branching, saved progress)
 src/sim.ts                            practice panel state: switch positions, derived lights
 src/practice.ts                       builds the grouped practice sections from the steps
-src/components/                       schematic, panel view, step and practice panes, mapping review
+src/components/draw.ts                draws a panel as SVG (realistic, high-contrast look)
+src/components/                       schematic, panel view, free play, step and practice panes, mapping review
 scripts/check-data.mjs                data validation
 ```
 
@@ -128,7 +133,8 @@ Create `<panel-id>.controls.json` and `<panel-id>.schematic.ts` next to the exis
 ## Known limitations
 
 - **Simplified panel behaviour.** Lights follow the switches directly. Momentary and in-transit indications, failures, and anything that depends on engines, APU or flight phase are not modelled. Lights that the procedure does not check stay extinguished.
-- **Decoration.** Parts of the panel the procedure does not use (electrical meters, generators, door lights, voice recorder and others) are drawn approximately and cannot be operated.
+- **Decoration.** Parts of the forward panel the procedure does not use (electrical meters, generators, door lights, voice recorder and others) are drawn approximately; their controls move but have no effect.
+- **Aft panel.** Drawn from the reference image and the FCOM diagram (airplanes 1F076 – 1F157); not yet used by a procedure. IRS alignment is shortened to 20 seconds. Failures are not simulated, but every light can be previewed.
 - **Initial state.** Taken from the reference photo where it could be read; CAB/UTIL, IFE/PASS SEAT and TRIM AIR start OFF by assumption.
 - **Grouping rules.** Only the flight control panel follows instructor-written rules. The other sub-panels use the default grouping until their rules are supplied.
 - **Mapping not yet confirmed by an instructor.** Positions were measured on the photo and checked visually against it and against the FCOM panel diagrams.
