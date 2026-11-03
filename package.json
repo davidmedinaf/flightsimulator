@@ -8,9 +8,13 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "check:data": "node scripts/check-data.mjs",
-    "check:panels": "esbuild scripts/check-panels.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/check-panels.mjs && node node_modules/.cache/check-panels.mjs"
+    "check:panels": "esbuild scripts/check-panels.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/check-panels.mjs && node node_modules/.cache/check-panels.mjs",
+    "seed": "esbuild scripts/seed.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/seed.mjs && node node_modules/.cache/seed.mjs",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "check:exercises": "esbuild scripts/check-exercises.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/check-exercises.mjs && node node_modules/.cache/check-exercises.mjs"
   },
   "dependencies": {
+    "firebase": "^11.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

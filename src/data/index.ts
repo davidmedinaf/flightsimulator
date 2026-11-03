@@ -72,3 +72,22 @@ export function elementLabel(panel: Panel, id: string): string {
   if (panel.controls[parent]) return `${panel.controls[parent].label} (${light?.lines.join(' ') ?? id})`;
   return light?.lines.join(' ') ?? id;
 }
+
+/**
+ * Where any switch or light of a panel is, for highlighting: the measured
+ * control if there is one, otherwise the drawn element.
+ */
+export function elementControl(panel: Panel, id: string): Control | null {
+  if (panel.controls[id]) return panel.controls[id];
+  const s = panel.schematic;
+  const [vx, vy, vw, vh] = s.view ?? [0, 0, s.width, s.height];
+  const sw = s.switches.find((x) => x.id === id);
+  const l = sw ? null : s.lights.find((x) => x.id === id);
+  if (!sw && !l) return null;
+  const b = sw ? switchBox(sw) : lightBox(l!);
+  return {
+    label: elementLabel(panel, id),
+    kind: sw ? 'switch' : 'light',
+    rect: [(b.x - vx) / vw, (b.y - vy) / vh, b.w / vw, b.h / vh],
+  };
+}

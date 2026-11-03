@@ -1,0 +1,91 @@
+rules_version = '2';
+
+// Roles: admin (everything), creator (create and publish own exercises), user (view, vote, review).
+// Admins can revoke a user's votes or reviews, disable accounts and delete profiles.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function active() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && me().get('disabled', false) == false;
+    }
+    function isAdmin() {
+      return active() && me().role == 'admin';
+    }
+    function isCreator() {
+      return active() && me().role in ['admin', 'creator'];
+    }
+    function owns(data) {
+      return data.ownerId == request.auth.uid;
+    }
+
+    // ---------- users ----------
+    match /users/{uid} {
+      allow read: if active() || (signedIn() && request.auth.uid == uid);
+      // A new account starts as a user. The project owner's addresses start as admin and creator.
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.canVote == true
+        && request.resource.data.canReview == true
+        && request.resource.data.get('disabled', false) == false
+        && (request.resource.data.role == 'user'
+          || (request.resource.data.role == 'admin' && request.auth.token.email == 'damefr@hotmail.com')
+          || (request.resource.data.role == 'creator' && request.auth.token.email == 'damefr+creator@hotmail.com'));
+      // Users edit their own profile; role, permissions and status only by an admin.
+      allow update: if isAdmin()
+        || (active() && request.auth.uid == uid
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'canVote', 'canReview', 'disabled', 'email']));
+      allow delete: if isAdmin();
+    }
+
+    // ---------- exercises: the published version ----------
+    match /exercises/{id} {
+      allow read: if isAdmin()
+        || (active() && (owns(resource.data) || resource.data.visibility == 'public' || request.auth.uid in resource.data.sharedWith));
+      allow create: if isAdmin() || (isCreator() && owns(request.resource.data));
+      // Only an admin or the exercise's own creator publishes, changes visibility or shares it.
+      allow update: if isAdmin() || (isCreator() && owns(resource.data) && owns(request.resource.data));
+      allow delete: if isAdmin() || (isCreator() && owns(resource.data));
+    }
+
+    // ---------- drafts: at most one per exercise, seen only by its creator and admins ----------
+    match /drafts/{id} {
+      allow read: if isAdmin() || (isCreator() && owns(resource.data));
+      allow create: if isAdmin() || (isCreator() && owns(request.resource.data));
+      allow update: if isAdmin() || (isCreator() && owns(resource.data) && owns(request.resource.data));
+      allow delete: if isAdmin() || (isCreator() && owns(resource.data));
+    }
+
+    // ---------- reviews: one vote and one comment per user and exercise ----------
+    function validVote(d) {
+      return d.stars == null
+        || (d.stars is int && d.stars >= 1 && d.stars <= 5
+          && (me().canVote == true || (resource != null && resource.data.stars == d.stars)));
+    }
+    function validComment(d) {
+      return d.comment == ''
+        || (d.comment is string && d.comment.size() <= 1000
+          && (me().canReview == true || (resource != null && resource.data.comment == d.comment)));
+    }
+    match /reviews/{rid} {
+      allow read: if active();
+      allow create, update: if active()
+        && rid == request.resource.data.exerciseId + '_' + request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && validVote(request.resource.data)
+        && validComment(request.resource.data);
+      allow delete: if isAdmin() || (active() && resource.data.uid == request.auth.uid);
+    }
+
+    // ---------- notifications for admins (e.g. a comment with bad language) ----------
+    match /notifications/{nid} {
+      allow read, update, delete: if isAdmin();
+      allow create: if active() && request.resource.data.uid == request.auth.uid;
+    }
+  }
+}

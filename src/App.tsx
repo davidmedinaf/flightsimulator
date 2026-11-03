@@ -33,7 +33,7 @@ function readLink() {
   };
 }
 
-export default function App() {
+export default function App({ onExit }: { onExit?: () => void }) {
   const procedure = procedures[0];
   const panel = panels[procedure.defaultPanel];
   const sections = useMemo(() => buildPractice(procedure), [procedure]);
@@ -156,6 +156,11 @@ export default function App() {
             {started && (
               <button className="btn" onClick={restart}>
                 Reset panel and progress
+              </button>
+            )}
+            {onExit && (
+              <button className="btn" onClick={onExit}>
+                All exercises
               </button>
             )}
             <button className="btn" onClick={() => setScreen('explore')}>
